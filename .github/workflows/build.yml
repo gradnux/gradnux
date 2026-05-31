@@ -15,7 +15,7 @@ jobs:
                   # bootc?
                   sudo apt install -y podman
                   # kernel
-                  sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev
+                  sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -25,7 +25,7 @@ jobs:
             - name: build kernel
               run: |
                   ccache --max-size 10G
-                  git submodule update --init --recursive
+                  git submodule update --init --recursive --depth 1
                   CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
             - name: attempt?
               run: |

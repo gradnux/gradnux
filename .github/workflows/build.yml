@@ -63,8 +63,8 @@ jobs:
                   cd ..
             - name: build final image?
               run: |
-                  mkdir -p {tmp,sys,dev,proc}
-                  chmod 1777 {tmp,sys,dev,proc}
+                  mkdir -p rootfs/{tmp,sys,dev,proc}
+                  chmod 1777 rootfs/{tmp,sys,dev,proc}
                   mkdir -p /tmp/mkstempc
                   stat rootfs/tmp
                   podman build -t gradnux:latest .

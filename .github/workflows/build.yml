@@ -63,6 +63,8 @@ jobs:
                   cd ..
             - name: build final image?
               run: |
+                  mkdir -p {tmp,sys,dev,proc}
+                  chmod 1777 {tmp,sys,dev,proc}
                   tree rootfs
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

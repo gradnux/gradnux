@@ -19,9 +19,9 @@ jobs:
             - name: setup ccache
               uses: actions/cache@v4
               with:
-                  path: ./kernel
-                  key: kernel-ccache
-                  restore-keys: kernel-ccache
+                  path: .
+                  key: gradnux-ccache
+                  restore-keys: gradnux-ccache
             - name: build kernel
               run: |
                   ccache --max-size 10G
@@ -30,15 +30,20 @@ jobs:
                   # not now apparently
             - name: attempt?
               run: |
-                  aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.5.tar.gz"
-                  tar -xf musl-1.2.5.tar.gz
-                  cd musl-1.2.5
+                  aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
+                  aria2c -j 16 -x 16 -s 16 "https://repo.or.cz/tinycc.git/snapshot/d348a9a51d32cece842b7885d27a411436d7887b.tar.gz" -o tcc.tar.gz
+                  mkdir -p musl tcc
+                  tar -xf musl.tar.gz -C musl
+                  tar -xf tcc.tar.gz -C tcc
+                  cd musl
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   make install
                   cd ..
                   cp -r /opt/musl rootfs/opt/
                   ls -la rootfs/opt
+                  echo "/opt/musl/bin/" >> $GITHUB_PATH
+                  
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

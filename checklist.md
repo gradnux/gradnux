@@ -1,8 +1,8 @@
 - [x] kernel
-- [ ] musl
+- [x] musl
 - [ ] tcc
 - [ ] systemd?
-- [ ] gnu bash
+- [ ] (gnu) bash
 - [ ] busybox
 - [ ] bootc?
 - [ ] x11

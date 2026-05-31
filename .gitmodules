@@ -1,6 +1,6 @@
 [submodule "kernel"]
 	path = kernel
-	url = https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+	url = https://github.com/torvalds/linux.git
 [submodule "tcc"]
 	path = tcc
 	url = https://github.com/mirror/tinycc.git

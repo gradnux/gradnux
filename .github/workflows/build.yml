@@ -34,7 +34,7 @@ jobs:
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
                   file musl.tar.gz
                   cd musl
-                  ls
+                  ls -la
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   make install

@@ -16,22 +16,22 @@ jobs:
                   sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
-            - name: download the tars
+            - name: setup
               run: |
                   mkdir -p musl busybox rootfs/opt
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
+                  git submodule update --init --recursive --depth 1
             - name: setup ccache
               uses: actions/cache@v4
               with:
                   path: ./kernel
                   key: kernel-ccache
                   restore-keys: kernel-ccache
-            - name: init submodules and build kernel
+            - name: build kernel (stub)
               run: |
-                  git submodule update --init --recursive --depth 1
                   ccache --max-size 10G
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
@@ -47,7 +47,7 @@ jobs:
             - name: build chibicc
               run: |
                   cd chibicc
-                  CC=/opt/musl/bin/musl-gcc make chibicc
+                  CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make chibicc
                   chmod +x ./chibicc
                   mv ./chibicc ../rootfs/opt/bin
                   cd ..
@@ -56,11 +56,11 @@ jobs:
                   cd busybox
                   make defconfig
                   sed -E -i "s/CONFIG_TC=[ym]/CONFIG_TC=n/" .config
-                  CC=/opt/musl/bin/musl-gcc make -j$(nproc)
+                  CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$(realpath ../rootfs)" install
                   find ../rootfs/sbin -type l -delete
                   cd ..
-            - name: attempt?
+            - name: build final image?
               run: |
                   tree rootfs
                   podman build -t gradnux:latest .

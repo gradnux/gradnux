@@ -1,7 +1,7 @@
 - [x] kernel
 - [x] musl
 - [x] chibicc
-- [ ] busybox
+- [x] busybox
 - [ ] (gnu) bash
 - [ ] systemd?
 - [ ] bootc?

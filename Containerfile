@@ -1,4 +1,4 @@
-# bootc stuff, i guess.
+# containers stuff, i guess.
 FROM scratch
 
 COPY rootfs/ /

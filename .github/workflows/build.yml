@@ -13,8 +13,8 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc aria2 realname
-                  # serious question why do we not have realname preinstalled on these shitass runners
+                  sudo apt install -y build-essential gcc aria2 realpath
+                  # serious question why do we not have realpath preinstalled on these shitass runners
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
@@ -58,7 +58,7 @@ jobs:
                   make defconfig
                   sed -E -i "s/CONFIG_TC=[ym]/CONFIG_TC=n/" .config
                   CC=/opt/musl/bin/musl-gcc make -j$(nproc)
-                  CONFIG_PREFIX="$(realname ../rootfs)" install
+                  CONFIG_PREFIX="$(realpath ../rootfs)" install
                   cd ..
             - name: attempt?
               run: |

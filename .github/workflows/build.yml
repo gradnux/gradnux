@@ -50,8 +50,7 @@ jobs:
                   cd ..
                   cd busybox
                   make defconfig
-                  sed -E -i "s/CONFIG_TC=[ynm]/# tc is 100% disabled shit yourself/" .config
-                  make oldconfig
+                  sed -E -i "s/CONFIG_TC=[ym]/CONFIG_TC=n/" .config
                   CC=/opt/musl/bin/musl-gcc make -j$(nproc)
                   CONFIG_PREFIX="$(realname ../rootfs)" install
                   cd ..

@@ -42,6 +42,7 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
+                  tree /opt/musl/bin
                   cd chibicc
                   CC=musl-gcc make chibicc
                   cp -r ./chibicc ../rootfs/opt

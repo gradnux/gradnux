@@ -44,12 +44,12 @@ jobs:
                   cp -r /opt/musl rootfs/opt/
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   cd tcc
-                  CC=musl-gcc ./configure --prefix=/opt/tcc
+                  CC=musl-gcc ./configure --prefix="$HOME/tcc"
                   make tcc
                   make install-tcc
                   cd ..
-                  ls -la /opt/
-                  cp -r /opt/tcc rootfs/opt/
+                  ls -la ~
+                  cp -r ~/tcc rootfs/opt/
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

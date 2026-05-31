@@ -33,8 +33,8 @@ jobs:
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
                   aria2c -j 16 -x 16 -s 16 "https://repo.or.cz/tinycc.git/snapshot/d348a9a51d32cece842b7885d27a411436d7887b.tar.gz" -o tcc.tar.gz
                   mkdir -p musl tcc
-                  tar -xf musl.tar.gz -C musl
-                  tar -xf tcc.tar.gz -C tcc
+                  tar -xf musl.tar.gz -C musl --strip-components=1
+                  tar -xf tcc.tar.gz -C tcc --strip-components=1
                   cd musl
                   ls
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
@@ -44,7 +44,11 @@ jobs:
                   cp -r /opt/musl rootfs/opt/
                   ls -la rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
-                  
+                  cd tcc
+                  CC=musl-gcc ./configure --prefix=/opt/tcc
+                  make
+                  make install
+                  cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

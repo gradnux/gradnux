@@ -36,6 +36,7 @@ jobs:
                   tar -xf musl.tar.gz -C musl
                   tar -xf tcc.tar.gz -C tcc
                   cd musl
+                  ls
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   make install

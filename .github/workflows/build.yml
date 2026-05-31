@@ -16,14 +16,15 @@ jobs:
                   sudo apt install -y tcc
                   # bootc?
                   sudo apt install -y podman go-md2man
-                  "CARGO_HOME=/tmp/rust" >> $GITHUB_PATH
-                  "RUSTUP_HOME=/tmp/rust" >> $GITHUB_PATH
+                  mkdir -p ~/tmp/{rust,bootc}
+                  "CARGO_HOME=~/tmp/rust" >> $GITHUB_PATH
+                  "RUSTUP_HOME=~/tmp/rust" >> $GITHUB_PATH
                   curl -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y
                   source "$RUSTUP_HOME"
                   git clone "https://github.com/bootc-dev/bootc.git"
                   cd bootc
-                  make bin install-all DESTDIR=/tmp/bootc/
-                  source "/tmp/bootc"
+                  make bin install-all DESTDIR="$HOME/tmp/bootc/"
+                  source "~/tmp/bootc"
                   cd ..
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev

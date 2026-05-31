@@ -44,13 +44,13 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
-            # - name: build chibicc
-            #   run: |
-            #       cd chibicc
-            #       CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make chibicc
-            #       chmod +x ./chibicc
-            #       mv ./chibicc ../rootfs/opt/bin
-            #       cd ..
+            - name: build chibicc
+              run: |
+                  cd chibicc
+                  CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make chibicc
+                  chmod +x ./chibicc
+                  mv ./chibicc ../rootfs/opt/bin
+                  cd ..
             - name: build busybox
               run: |
                   cd busybox

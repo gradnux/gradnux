@@ -36,6 +36,7 @@ jobs:
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   make install
+                  cd ..
                   cp -r /opt/musl rootfs/opt/
                   ls -la rootfs/opt
                   podman save -o gradnux.tar gradnux:latest

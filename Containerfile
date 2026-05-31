@@ -1,7 +1,7 @@
 # bootc stuff, i guess.
 FROM scratch
 
-COPY rootfs/* /
+COPY rootfs/ /
 
 RUN ["/opt/bin/chibicc", "/sbin/init.c", "-o", "/sbin/init"]
 

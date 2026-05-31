@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential musl musl-tools musl-dev aria2
+                  sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
@@ -34,7 +34,7 @@ jobs:
                   tar -xf musl-1.2.5.tar.gz
                   cd musl-1.2.5
                   ./configure --prefix=/opt/musl --target=x86_64-linux-musl
-                  make -j$(nproc)
+                  CC=gcc AR=ar RANLIB=ranlib make -j$(nproc)
                   make install
                   cp -r /opt/musl rootfs/opt/
                   ls -la rootfs/opt

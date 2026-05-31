@@ -22,10 +22,10 @@ jobs:
                   path: ./kernel
                   key: kernel-ccache
                   restore-keys: kernel-ccache
-            - name: build kernel
+            - name: init submodules and build kernel
               run: |
-                  ccache --max-size 10G
                   git submodule update --init --recursive --depth 1
+                  ccache --max-size 10G
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
             - name: download the tars
@@ -57,7 +57,7 @@ jobs:
                   make defconfig
                   sed -E -i "s/CONFIG_TC=[ym]/CONFIG_TC=n/" .config
                   CC=/opt/musl/bin/musl-gcc make -j$(nproc)
-                  CONFIG_PREFIX="$(realpath ../rootfs)" install
+                  make CONFIG_PREFIX="$(realpath ../rootfs)" install
                   cd ..
             - name: attempt?
               run: |

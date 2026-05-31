@@ -36,6 +36,7 @@ jobs:
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://repo.or.cz/tinycc.git/snapshot/d348a9a51d32cece842b7885d27a411436d7887b.tar.gz" -o tcc.tar.gz
                   file tcc.tar.gz
+                  cat tcc.tar.gz
                   tar -xf tcc.tar.gz -C tcc --strip-components=1
                   cd musl
                   ls

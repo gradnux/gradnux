@@ -46,7 +46,7 @@ jobs:
                   cd tcc
                   CC=musl-gcc ./configure --prefix="$HOME/tcc"
                   make tcc
-                  make install-tcc
+                  make install
                   cd ..
                   ls -la ~
                   cp -r ~/tcc rootfs/opt/

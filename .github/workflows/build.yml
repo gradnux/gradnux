@@ -45,7 +45,7 @@ jobs:
                   ls -la rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   cd tcc
-                  CC=musl-gcc ./configure --prefix=/opt/tcc
+                  CC=musl-gcc ./configure --prefix=/opt/tcc --disable-bcheck
                   make
                   make install
                   cd ..

@@ -19,9 +19,9 @@ jobs:
             - name: setup ccache
               uses: actions/cache@v4
               with:
-                  path: .
-                  key: gradnux-ccache
-                  restore-keys: gradnux-ccache
+                  path: ./kernel
+                  key: kernel-ccache
+                  restore-keys: kernel-ccache
             - name: build kernel
               run: |
                   ccache --max-size 10G

@@ -4,7 +4,7 @@ on: push
 
 jobs:
     build:
-        name: build the image ig
+        name: build everything
         runs-on: ubuntu-latest
         steps:
             - name: check out
@@ -55,7 +55,8 @@ jobs:
               run: |
                   cd busybox
                   make defconfig
-                  sed -E -i "s/CONFIG_TC=[ym]/CONFIG_TC=n/" .config
+                  sed -E -i "s/CONFIG_TC=[ynm]/CONFIG_TC=n/" .config
+                  sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
                   CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
                   make CONFIG_PREFIX="$(realpath ../rootfs)" install
                   find ../rootfs/sbin -type l -delete

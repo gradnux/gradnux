@@ -3,6 +3,6 @@ FROM scratch
 
 COPY rootfs/* /
 
-RUN tcc /sbin/init.c -o /sbin/init
+RUN /opt/tcc/bin/tcc /sbin/init.c -o /sbin/init
 
 CMD ["/sbin/init"]

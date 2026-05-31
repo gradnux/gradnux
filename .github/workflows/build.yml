@@ -39,7 +39,7 @@ jobs:
                   cd ..
                   cp -r /opt/musl rootfs/opt/
                   ls -la rootfs/opt
-                  podman build -t gradnux:latest
+                  podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image
               uses: actions/upload-artifact@v4

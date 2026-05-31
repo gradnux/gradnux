@@ -12,14 +12,25 @@ jobs:
             - name: install prerequisites
               run: |
                   sudo apt update -y
+                  # host helpers
+                  sudo apt install -y 8cc
                   # bootc?
-                  sudo apt install -y podman
+                  sudo apt install -y podman go-md2man
+                  "CARGO_HOME=/tmp/rust" >> $GITHUB_PATH
+                  "RUSTUP_HOME=/tmp/rust" >> $GITHUB_PATH
+                  curl -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y
+                  source "$RUSTUP_HOME"
+                  git clone "https://github.com/bootc-dev/bootc.git"
+                  cd bootc
+                  make bin install-all DESTDIR=/tmp/bootc/
+                  source "/tmp/bootc"
+                  cd ..
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
               uses: actions/cache@v4
               with:
-                  path: ~/ccache
+                  path: ./kernel
                   key: kernel-ccache
                   restore-keys: kernel-ccache
             - name: build kernel
@@ -29,5 +40,7 @@ jobs:
                   CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
             - name: attempt?
               run: |
+                  git clone "https://github.com/bootc-dev/bootc.git"
+                  make -C
                   podman build -t gradnux:latest -f Containerfile .
                   # idfk

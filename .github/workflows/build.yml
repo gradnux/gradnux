@@ -65,6 +65,7 @@ jobs:
               run: |
                   mkdir -p {tmp,sys,dev,proc}
                   chmod 1777 {tmp,sys,dev,proc}
+                  mkdir -p /tmp/mkstempc
                   tree rootfs
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

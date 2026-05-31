@@ -1,0 +1,7 @@
+- [x] kernel
+- [ ] systemd??
+- [ ] bootc?
+- [ ] gnu bash
+- [ ] busybox
+- [ ] x11
+- [ ] fluxbox fork (grad fluxbox)

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+test -f .config
+hasCfg=$?
+if [ $hasCfg -eq 0 ]; then
+	mv .config kernel
+fi
+cd kernel
+if [ $hasCfg -eq 1 ]; then
+	make defconfig
+fi
+make -j$(nproc)
+code=$?
+mv .config ..
+cd ..
+exit $code

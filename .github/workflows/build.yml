@@ -15,7 +15,7 @@ jobs:
                   # host helpers
                   sudo apt install -y tcc
                   # bootc?
-                  sudo apt install -y podman go-md2man
+                  sudo apt install -y podman go-md2man libglib2.0-dev pkg-config lib-ostreedev
                   mkdir -p ~/tmp/{rust,bootc}
                   echo "CARGO_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
                   echo "RUSTUP_HOME=$HOME/tmp/rust" >> $GITHUB_ENV

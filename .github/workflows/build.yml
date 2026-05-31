@@ -40,14 +40,14 @@ jobs:
                   make -j$(nproc)
                   make install
                   cd ..
-                  cp -r /opt/musl rootfs/opt/
+                  cp -r /opt/musl/* rootfs/opt/
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   cd tcc
                   CC=musl-gcc ./configure --prefix="$HOME/tcc"
                   make tcc
                   make install
                   cd ..
-                  cp -r ~/tcc rootfs/opt/
+                  cp -r ~/tcc/* rootfs/opt/
                   tree rootfs
                   tree "$HOME/tcc"
                   podman build -t gradnux:latest .

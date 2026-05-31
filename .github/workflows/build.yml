@@ -25,7 +25,7 @@ jobs:
             - name: build kernel
               run: |
                   ccache --max-size 10G
-                  git submodule update --init --recursive --depth 1
+                  # git submodule update --init --recursive --depth 1
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
             - name: attempt?

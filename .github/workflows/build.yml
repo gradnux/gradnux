@@ -48,8 +48,8 @@ jobs:
                   make tcc
                   make install
                   cd ..
-                  ls -la ~
                   cp -r ~/tcc rootfs/opt/
+                  tree rootfs
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

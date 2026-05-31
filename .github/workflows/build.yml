@@ -30,7 +30,7 @@ jobs:
                   # not now apparently
             - name: attempt?
               run: |
-                  mkdir -p musl rootfs/opt
+                  mkdir -p musl busybox rootfs/opt
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
@@ -50,8 +50,8 @@ jobs:
                   cd ..
                   cd busybox
                   make defconfig
-                  make -j$(nproc)
-                  make CONFIG_PREFIX="$(realname ../rootfs)" install
+                  CC=/opt/musl/bin/musl-gcc make -j$(nproc)
+                  CONFIG_PREFIX="$(realname ../rootfs)" install
                   cd ..
                   tree rootfs
                   podman build -t gradnux:latest .

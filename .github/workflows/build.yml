@@ -31,9 +31,8 @@ jobs:
             - name: attempt?
               run: |
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
-                  aria2c -j 16 -x 16 -s 16 "https://repo.or.cz/tinycc.git/snapshot/d348a9a51d32cece842b7885d27a411436d7887b.tar.gz" -o tcc.tar.gz
-                  mkdir -p musl tcc
                   tar -xf musl.tar.gz -C musl --strip-components=1
+                  aria2c -j 16 -x 16 -s 16 "https://repo.or.cz/tinycc.git/snapshot/d348a9a51d32cece842b7885d27a411436d7887b.tar.gz" -o tcc.tar.gz
                   tar -xf tcc.tar.gz -C tcc --strip-components=1
                   cd musl
                   ls

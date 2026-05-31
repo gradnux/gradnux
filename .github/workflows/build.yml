@@ -50,7 +50,7 @@ jobs:
                   cd ..
                   cd busybox
                   make defconfig
-                  scripts/config --disable TC
+                  sed -E -i "s/CONFIG_TC=[ynm]/# tc is 100% disabled shit yourself/" .config
                   make oldconfig
                   CC=/opt/musl/bin/musl-gcc make -j$(nproc)
                   CONFIG_PREFIX="$(realname ../rootfs)" install

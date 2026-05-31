@@ -45,9 +45,9 @@ jobs:
                   ls -la rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   cd tcc
-                  CC=musl-gcc ./configure --prefix=/opt/tcc --disable-bcheck
-                  make
-                  make install
+                  CC=musl-gcc ./configure --prefix=/opt/tcc
+                  make tcc
+                  make install-tcc
                   cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

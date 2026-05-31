@@ -32,10 +32,10 @@ jobs:
               run: |
                   mkdir -p musl rootfs/opt
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
-                  file musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
+                  aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
+                  tar -xf bb.tar.gz -C busybox --strip-components=1
                   cd musl
-                  ls
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   make install
@@ -45,7 +45,13 @@ jobs:
                   tree /opt/musl/bin
                   cd chibicc
                   CC=/opt/musl/bin/musl-gcc make chibicc
-                  cp ./chibicc ../rootfs/opt/bin
+                  chmod +x ./chibicc
+                  mv ./chibicc ../rootfs/opt/bin
+                  cd ..
+                  cd busybox
+                  make defconfig
+                  make -j$(nproc)
+                  make CONFIG_PREFIX="$(realname ../rootfs)" install
                   cd ..
                   tree rootfs
                   podman build -t gradnux:latest .

@@ -4,3 +4,6 @@
 [submodule "chibicc"]
 	path = chibicc
 	url = https://github.com/rui314/chibicc
+[submodule "systemd"]
+	path = systemd
+	url = https://github.com/systemd/systemd/

@@ -13,8 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc aria2 realpath
-                  # serious question why do we not have realpath preinstalled on these shitass runners
+                  sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache

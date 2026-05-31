@@ -20,7 +20,7 @@ jobs:
                   echo "CARGO_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
                   echo "RUSTUP_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
                   curl -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y
-                  source "$RUSTUP_HOME"
+                  . "$HOME/.cargo/env"
                   echo "$RUSTUP_HOME" >> $GITHUB_PATH
                   git clone "https://github.com/bootc-dev/bootc.git"
                   cd bootc

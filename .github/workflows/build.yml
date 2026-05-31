@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y 8cc
+                  sudo apt install -y tcc
                   # bootc?
                   sudo apt install -y podman go-md2man
                   "CARGO_HOME=/tmp/rust" >> $GITHUB_PATH

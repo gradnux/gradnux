@@ -1,7 +1,7 @@
-#include <stdio.h>
+void puts(char*str);
 
 int main() {
-	printf("hello, world\n");
+	puts("hello, world\n");
 	while (1) ;
 	return 0;
 }

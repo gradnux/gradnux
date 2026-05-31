@@ -49,6 +49,7 @@ jobs:
                   cd ..
                   cp -r ~/tcc rootfs/opt/
                   tree rootfs
+                  tree "$HOME/tcc"
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

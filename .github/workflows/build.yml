@@ -11,7 +11,7 @@ jobs:
           run: |
               sudo apt update -y
               # bootc?
-              sudo apt install -y libostree-dev ostree
+              sudo apt install -y podman
               # kernel
               sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev
         - name: setup ccache
@@ -25,3 +25,7 @@ jobs:
               ccache --max-size 10G
               git submodule update --init --recursive
               CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
+        - name: attempt?
+          run: |
+              podman build -t gradnux:latest -f Containerfile .
+              # idfk

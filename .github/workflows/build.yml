@@ -50,6 +50,8 @@ jobs:
                   cd ..
                   cd busybox
                   make defconfig
+                  scripts/config --disable TC
+                  make oldconfig
                   CC=/opt/musl/bin/musl-gcc make -j$(nproc)
                   CONFIG_PREFIX="$(realname ../rootfs)" install
                   cd ..

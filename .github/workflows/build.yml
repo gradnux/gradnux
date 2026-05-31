@@ -17,17 +17,16 @@ jobs:
                   # bootc?
                   sudo apt install -y podman go-md2man
                   mkdir -p ~/tmp/{rust,bootc}
-                  "CARGO_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
-                  "RUSTUP_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
+                  echo "CARGO_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
+                  echo "RUSTUP_HOME=$HOME/tmp/rust" >> $GITHUB_ENV
                   curl -sSf "https://sh.rustup.rs" | sh -s -- --profile minimal -y
                   source "$RUSTUP_HOME"
-                  "$RUSTUP_HOME" >> $GITHUB_PATH
+                  echo "$RUSTUP_HOME" >> $GITHUB_PATH
                   git clone "https://github.com/bootc-dev/bootc.git"
                   cd bootc
-                  "BOOTC_HOME=$HOME/tmp/bootc"
+                  echo "BOOTC_HOME=$HOME/tmp/bootc" >> $GITHUB_ENV
                   make bin install-all DESTDIR="$BOOTC_HOME"
-                  source 
-                  "$BOOTC_HOME" >> $GITHUB_PATH
+                  echo "$BOOTC_HOME" >> $GITHUB_PATH
                   cd ..
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev

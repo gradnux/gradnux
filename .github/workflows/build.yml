@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential musl-tools musl-dev aria2
+                  sudo apt install -y build-essential musl musl-tools musl-dev aria2
                   # kernel
                   sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache

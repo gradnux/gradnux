@@ -42,14 +42,11 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
-                  cd tcc
-                  CC=musl-gcc ./configure --prefix="$HOME/tcc"
-                  make tcc
-                  make install
+                  cd chibicc
+                  CC=musl-gcc make chibicc
+                  cp -r ./chibicc ../rootfs/opt
                   cd ..
-                  cp -r ~/tcc/* rootfs/opt
                   tree rootfs
-                  tree "$HOME/tcc"
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

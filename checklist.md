@@ -1,6 +1,6 @@
 - [x] kernel
 - [x] musl
-- [x] tcc
+- [ ] chibicc
 - [ ] busybox
 - [ ] (gnu) bash
 - [ ] systemd?

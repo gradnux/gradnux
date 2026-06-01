@@ -51,31 +51,31 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   cp -r rootfs/opt/lib/ rootfs/lib
-                  cp -r rootfs/opt/lib/ rootfs/usr/lib64
-                  # i only did that for chibicc
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
-                  ls $(which musl-gcc)
                   ls -la /lib/
                   ls -la /lib64/
-                  # mv /lib/ld-linux-x86-64.so.1 /lib/__hiddenGlibcPlzDontTellAnyone__
-            - name: build binutils
+                  rm /lib/ld-linux*.so.*
+                  # wipe glibc as if it never existed. tehe~
+            # binutils is useless for tcc as tcc does everything itself. :)
+            # - name: build binutils
+            #   run: |
+            #       cd binutils
+            #       ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared LDFLAGS="-static -static-libgcc"
+            #       make configure-host
+            #       CC=/opt/musl/bin/musl-gcc CXX=/opt/musl/bin/musl-g++ AR=/opt/musl/bin/musl-ar make -j$(nproc) LDFLAGS="--static"
+            #       make DESTDIR="$(realpath ./install)" install
+            #       file install/opt/binutils/bin/as
+            #       cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/
+            #       cp -L install/opt/binutils/bin/ld ../rootfs/opt/bin/
+            #       cd ..
+            - name: build tcc
               run: |
-                  cd binutils
-                  ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared LDFLAGS="-static -static-libgcc"
-                  make configure-host
-                  CC=/opt/musl/bin/musl-gcc CXX=/opt/musl/bin/musl-g++ AR=/opt/musl/bin/musl-ar make -j$(nproc) LDFLAGS="--static"
-                  make DESTDIR="$(realpath ./install)" install
-                  file install/opt/binutils/bin/as
-                  cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/
-                  cp -L install/opt/binutils/bin/ld ../rootfs/opt/bin/
-                  cd ..
-            - name: build chibicc
-              run: |
-                  cd chibicc
-                  CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make chibicc
-                  chmod +x ./chibicc
-                  mv ./chibicc ../rootfs/opt/bin
+                  cd tcc
+                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static
+                  make -j$(nproc)
+                  chmod +x ./tcc
+                  mv ./tcc ../rootfs/opt/bin/
                   cd ..
             - name: build busybox
               run: |

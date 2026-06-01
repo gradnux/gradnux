@@ -4,8 +4,8 @@ FROM scratch
 COPY rootfs/ /
 
 ENV PATH="/opt/bin:/sbin:/bin:${PATH}"
-# for chibicc to work properly
+# for literally anything (i guess) to work properly
 
-RUN ["/opt/bin/chibicc", "/sbin/init.c", "-o", "/sbin/init", "-I/opt/include"]
+RUN ["/opt/bin/tcc", "/sbin/init.c", "-o", "/sbin/init", "-I/opt/include", "-L/opt/lib", "-lc"]
 
 CMD ["/sbin/init"]

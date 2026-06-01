@@ -69,7 +69,7 @@ jobs:
               run: |
                   cd tcc
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --config-bcheck=no
-                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" CONFIG_bcheck=no tcc
+                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/opt/bin/
                   cd ..

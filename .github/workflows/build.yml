@@ -49,7 +49,7 @@ jobs:
                   make install
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
-                  cp rootfs/opt/lib rootfs/lib
+                  cp -r rootfs/opt/lib rootfs/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
             - name: build binutils
               run: |

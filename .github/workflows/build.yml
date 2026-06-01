@@ -62,7 +62,7 @@ jobs:
                   cd binutils
                   ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared LDFLAGS="-static -static-libgcc"
                   make configure-host
-                  CC=/opt/musl/bin/musl-gcc make -j$(nproc) LDFLAGS="-all-static"
+                  CC=/opt/musl/bin/musl-gcc CXX=/opt/musl/bin/musl-g++ AR=/opt/musl/bin/musl-ar make -j$(nproc) LDFLAGS="--static"
                   make DESTDIR="$(realpath ./install)" install
                   file install/opt/binutils/bin/as
                   cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/

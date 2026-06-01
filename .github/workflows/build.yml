@@ -53,8 +53,6 @@ jobs:
                   cp -r rootfs/opt/lib/ rootfs/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
-                  sudo rm /lib*/ld-linux*.so.2
-                  # wipe glibc as if it never existed. tehe~
             # binutils is useless for tcc as tcc does everything itself. :)
             # - name: build binutils
             #   run: |

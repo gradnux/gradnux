@@ -52,7 +52,7 @@ jobs:
             - name: build binutils
               run: |
                   cd binutils
-                  ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-ld=gold --enable-static --disable-shared
+                  ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared
                   CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make -j$(nproc)
                   make DESTDIR="$(realpath ./install)" install
                   cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/

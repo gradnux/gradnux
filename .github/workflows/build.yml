@@ -69,9 +69,11 @@ jobs:
               run: |
                   cd tcc
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --config-bcheck=no
-                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc
+                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/opt/bin/
+                  mv /opt/tcc/lib/tcc/libtcc1.a rootfs/opt/tcc/lib/tcc/
+                  # ^^ most luck running that
                   cd ..
             - name: build busybox
               run: |

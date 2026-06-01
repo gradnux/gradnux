@@ -78,8 +78,8 @@ jobs:
                   cd ..
             - name: build final image?
               run: |
-                  mkdir -p rootfs/{bin,dev,etc,lib,lib64,proc,sbin,sys,usr}
-                  chmod 1777 rootfs/{tmp,sys,dev,proc}
+                  mkdir -p rootfs/{bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
+                  chmod 1777 rootfs/tmp
                   mkdir -p /tmp/mkstempc
                   tree rootfs > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out

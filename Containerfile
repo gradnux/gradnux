@@ -3,6 +3,6 @@ FROM scratch
 
 COPY rootfs/ /
 
-RUN chibicc /sbin/init.c -o /sbin/init -I/opt/include
+RUN ["/opt/bin/chibicc", "/sbin/init.c", "-o", "/sbin/init", "-I/opt/include"]
 
 CMD ["/sbin/init"]

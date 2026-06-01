@@ -78,6 +78,8 @@ jobs:
                   mkdir -p ../rootfs/opt/tcc/lib/tcc
                   mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
                   cd ..
+                  # anyways
+                  cp rootfs/usr/lib/crt*.o rootfs/opt/tcc/lib/tcc/
             - name: build busybox
               run: |
                   cd busybox

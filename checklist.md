@@ -1,7 +1,6 @@
 - [x] kernel
 - [x] musl
-- [ ] binutils
-- [x] chibicc
+- [ ] tcc
 - [x] busybox
 - [ ] (gnu) bash
 - [ ] systemd?

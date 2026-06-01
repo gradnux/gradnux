@@ -77,7 +77,8 @@ jobs:
                   mv ./tcc ../rootfs/opt/bin/
                   tree > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out
-                  mv libtcc1.a rootfs/opt/tcc/lib/tcc/
+                  ls lib*.a
+                  mv ./libtcc1.a rootfs/opt/tcc/lib/tcc/
                   cd ..
             - name: build busybox
               run: |

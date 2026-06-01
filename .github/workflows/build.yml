@@ -75,9 +75,7 @@ jobs:
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/opt/bin/
-                  tree > /tmp/out 2>&1 && cat /tmp/out
-                  rm /tmp/out
-                  ls lib*.a
+                  mkdir -p rootfs/opt/tcc/lib/tcc
                   mv ./libtcc1.a rootfs/opt/tcc/lib/tcc/
                   cd ..
             - name: build busybox

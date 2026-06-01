@@ -50,7 +50,6 @@ jobs:
                   # mmh, sudo
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
-                  cp -r rootfs/opt/lib/ rootfs/usr/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
             # binutils is useless for tcc as tcc does everything itself. :)
@@ -74,12 +73,13 @@ jobs:
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --config-bcheck=no
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
-                  mv ./tcc ../rootfs/opt/bin/
+                  mkdir -p ../rootfs/opt/tcc/
                   mkdir -p ../rootfs/opt/tcc/lib/tcc
+                  mv ./tcc ../rootfs/opt/tcc/
                   mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
                   cd ..
                   # anyways
-                  cp rootfs/usr/lib/crt*.o rootfs/opt/tcc/lib/tcc/
+                  cp rootfs/opt/lib/crt*.o rootfs/opt/tcc/lib/tcc/
             - name: build busybox
               run: |
                   cd busybox

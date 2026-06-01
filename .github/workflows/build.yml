@@ -51,11 +51,15 @@ jobs:
                   cp -r /opt/musl/* rootfs/opt
                   cp -r rootfs/opt/lib/ rootfs/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
+                  cp /opt/musl/lib/ld-musl-x86_64.so.1 /lib/
+                  cp /opt/musl/lib/ld-musl-x86_64.so.1 /lib64/
+                  mv /lib64/ld-linux-x86-64.so.2 /lib64/__hiddenGlibcPlzDontTellAnyone__
             - name: build binutils
               run: |
                   cd binutils
                   ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared LDFLAGS="-static -static-libgcc"
-                  CC=/opt/musl/bin/musl-gcc make -j$(nproc) LDFLAGS="-Wl,-static" LIBS="-all-static"
+                  make configure-host
+                  CC=/opt/musl/bin/musl-gcc make -j$(nproc) LDFLAGS="-all-static"
                   make DESTDIR="$(realpath ./install)" install
                   file install/opt/binutils/bin/as
                   cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/

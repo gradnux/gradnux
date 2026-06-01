@@ -40,6 +40,7 @@ jobs:
                   ccache --max-size 10G
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
+                  # let's not waste microsoft's resources (for now... haha...)
             - name: build musl
               run: |
                   cd musl
@@ -72,9 +73,8 @@ jobs:
                   sed -E -i "s/CONFIG_TC=[ynm]/CONFIG_TC=n/" .config
                   sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
                   CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
-                  echo "BBPREF=$HOME/bbPref" >> $GITHUB_ENV
-                  make CONFIG_PREFIX="$BBPREF" install
-                  cp -a "$BBPREF/bin/"* rootfs/opt/bin/
+                  make CONFIG_PREFIX="$HOME/bb" install
+                  cp -a ~/bb/bin/* rootfs/opt/bin/
                   cd ..
             - name: build final image?
               run: |

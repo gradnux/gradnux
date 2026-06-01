@@ -25,8 +25,8 @@ jobs:
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   # aria2c -j 16 -x 16 -s 16 "https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.gz" -o binutils.tar.bz2
                   # if this dl is slow on my pc even with aria2c, it would prob be slow on gh actions runners
-                  tar -xf binutils.tar.gz -C binutils --strip-components=1
-                  echo "yarrrr i struck GÖLD!!!!"
+                  # tar -xf binutils.tar.gz -C binutils --strip-components=1
+                  # echo "yarrrr i struck GÖLD!!!!"
                   # yes i got the binutils with gold
                   git submodule update --init --recursive --depth 1
             - name: setup ccache
@@ -69,11 +69,11 @@ jobs:
               run: |
                   cd tcc
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --config-bcheck=no
-                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
+                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/opt/bin/
                   mv /opt/tcc/lib/tcc/libtcc1.a rootfs/opt/tcc/lib/tcc/
-                  # ^^ most luck running that
+                  # ^^ most luck running that prob
                   cd ..
             - name: build busybox
               run: |

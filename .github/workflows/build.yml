@@ -51,7 +51,8 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   cp -r rootfs/opt/lib/ rootfs/lib
-                  cp -r rootfs/opt/lib/ rootfs/usr/lib
+                  cp -r rootfs/opt/lib/ rootfs/usr/lib64
+                  # i only did that for chibicc
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
                   ls $(which musl-gcc)

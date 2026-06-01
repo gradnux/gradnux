@@ -74,16 +74,19 @@ jobs:
                   sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
                   CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
+                  cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
+                  # just to make sure busybox is there and all
                   cp -a ~/bb/bin/* ../rootfs/opt/bin/
-                  ln -s ../opt/bin/busybox rootfs/bin/sh
                   cd ..
             - name: build final image?
               run: |
-                  mkdir -p rootfs/{bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
-                  chmod 1777 rootfs/tmp
-                  mkdir -p /tmp/mkstempc
-                  tree rootfs > /tmp/out 2>&1 && cat /tmp/out
+                  cd rootfs
+                  mkdir -p {bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
+                  chmod 1777 tmp
+                  ln -s ../opt/bin/busybox bin/sh
+                  tree > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out
+                  cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest
             - name: upload image

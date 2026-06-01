@@ -53,7 +53,7 @@ jobs:
                   cp -r rootfs/opt/lib/ rootfs/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
-                  mv /lib64/ld-linux-x86-64.so.1 /lib64/__hiddenGlibcPlzDontTellAnyone__
+                  mv /lib/ld-linux-x86-64.so.1 /lib/__hiddenGlibcPlzDontTellAnyone__
             - name: build binutils
               run: |
                   cd binutils

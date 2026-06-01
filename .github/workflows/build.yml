@@ -74,7 +74,7 @@ jobs:
                   sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
                   CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
-                  cp -a ~/bb/bin/* rootfs/opt/bin/
+                  cp -a ~/bb/bin/* ../rootfs/opt/bin/
                   cd ..
             - name: build final image?
               run: |

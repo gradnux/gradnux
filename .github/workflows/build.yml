@@ -68,8 +68,8 @@ jobs:
             - name: build tcc
               run: |
                   cd tcc
-                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static
-                  make -j$(nproc)
+                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --disable-bcheck --disable-gprof --disable-debug
+                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/opt/bin/
                   cd ..

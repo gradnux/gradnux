@@ -68,6 +68,8 @@ jobs:
             - name: build tcc
               run: |
                   cd tcc
+                  rm lib/bcheck.c
+                  # brute force turn off bcheck (hopefully this works?)
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --enable-static --config-bcheck=no
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc

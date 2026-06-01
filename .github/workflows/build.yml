@@ -46,14 +46,14 @@ jobs:
                   cd musl
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
-                  make install
+                  sudo make install
+                  # mmh, sudo
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   cp -r rootfs/opt/lib/ rootfs/lib
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
-                  cp /opt/musl/lib/ld-musl-x86_64.so.1 /lib/
-                  cp /opt/musl/lib/ld-musl-x86_64.so.1 /lib64/
-                  mv /lib64/ld-linux-x86-64.so.2 /lib64/__hiddenGlibcPlzDontTellAnyone__
+                  # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
+                  mv /lib64/ld-linux-x86-64.so.1 /lib64/__hiddenGlibcPlzDontTellAnyone__
             - name: build binutils
               run: |
                   cd binutils

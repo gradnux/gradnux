@@ -1,5 +1,6 @@
 - [x] kernel
 - [x] musl
+- [ ] binutils
 - [x] chibicc
 - [x] busybox
 - [ ] (gnu) bash

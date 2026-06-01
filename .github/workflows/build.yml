@@ -23,6 +23,11 @@ jobs:
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
+                  # aria2c -j 16 -x 16 -s 16 "https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.gz" -o binutils.tar.bz2
+                  # if this dl is slow on my pc even with aria2c, it would prob be slow on gh actions runners
+                  tar -xf binutils.tar.gz -C binutils --strip-components=1
+                  echo "yarrrr i struck GÖLD!!!!"
+                  # yes i got the binutils with gold
                   git submodule update --init --recursive --depth 1
             - name: setup ccache
               uses: actions/cache@v4
@@ -44,6 +49,15 @@ jobs:
                   cd ..
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
+            - name: build binutils
+              run: |
+                  cd binutils
+                  ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-ld=gold --enable-static --disable-shared
+                  CC=/opt/musl/bin/musl-gcc LDFLAGS="-static" make -j$(nproc)
+                  make DESTDIR="$(realpath ./install)" install
+                  cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/
+                  cp -L install/opt/binutils/bin/ld ../rootfs/opt/bin/
+                  cd ..
             - name: build chibicc
               run: |
                   cd chibicc
@@ -58,12 +72,13 @@ jobs:
                   sed -E -i "s/CONFIG_TC=[ynm]/CONFIG_TC=n/" .config
                   sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
                   CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
-                  make CONFIG_PREFIX="$(realpath ../rootfs)" install
-                  find ../rootfs/sbin -type l -delete
+                  echo "BBPREF=$HOME/bbPref" >> $GITHUB_ENV
+                  make CONFIG_PREFIX="$BBPREF" install
+                  cp -a "$BBPREF/bin/"* rootfs/opt/bin/
                   cd ..
             - name: build final image?
               run: |
-                  mkdir -p rootfs/{tmp,sys,dev,proc}
+                  mkdir -p rootfs/{bin,dev,etc,lib,lib64,proc,sbin,sys,usr}
                   chmod 1777 rootfs/{tmp,sys,dev,proc}
                   mkdir -p /tmp/mkstempc
                   tree rootfs > /tmp/out 2>&1 && cat /tmp/out

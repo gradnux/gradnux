@@ -79,7 +79,7 @@ jobs:
                   mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
                   cd ..
                   # anyways
-                  cp rootfs/opt/lib/crt*.o rootfs/opt/tcc/lib/tcc/
+                  cp rootfs/opt/lib/crt*.o rootfs/opt/tcc/
             - name: build busybox
               run: |
                   cd busybox

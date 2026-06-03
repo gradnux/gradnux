@@ -74,12 +74,10 @@ jobs:
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mkdir -p ../rootfs/opt/tcc/
-                  mkdir -p ../rootfs/opt/tcc/lib/tcc
+                  mkdir -p ../rootfs/opt/tcc/lib
                   mv ./tcc ../rootfs/opt/tcc/
-                  mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
+                  mv ./libtcc1.a ../rootfs/opt/tcc/lib
                   cd ..
-                  # anyways
-                  cp rootfs/opt/lib/crt*.o rootfs/opt/tcc/
             - name: build busybox
               run: |
                   cd busybox

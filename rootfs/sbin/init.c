@@ -1,7 +1,7 @@
-void puts(char*str);
+#include <stdio.h>
 
 int main() {
-	puts("hello, world\n");
+	printf("this is Grad LinuxTM\nenjoy\n");
 	while (1) ;
 	return 0;
 }

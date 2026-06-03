@@ -73,8 +73,8 @@ jobs:
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
-                  mkdir -p ../rootfs/opt/tcc/
-                  mkdir -p ../rootfs/opt/tcc/lib
+                  mkdir -p ../rootfs/opt/tcc
+                  mkdir -p ../rootfs/opt/tcc/lib/tcc
                   mv ./tcc ../rootfs/opt/tcc/
                   mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
                   cd ..

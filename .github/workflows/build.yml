@@ -77,6 +77,7 @@ jobs:
                   mkdir -p ../rootfs/opt/tcc/lib/tcc
                   mv ./tcc ../rootfs/opt/tcc/
                   mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
+                  mv include ../rootfs/opt/tcc/lib/tcc/
                   cd ..
             - name: build busybox
               run: |

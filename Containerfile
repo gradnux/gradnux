@@ -10,4 +10,6 @@ RUN ["tcc", "/sbin/init.c", "-o", "/sbin/init", "-L/opt/lib", "-I/opt/tcc/lib/tc
 
 # RUN ["busybox", "mv", "/sbin/initScript", "/sbin/init"]
 
+RUN printenv
+
 CMD ["/sbin/init"]

@@ -1,7 +1,7 @@
-#include <stdio.h>
+#include <unistd.h>
 
 int main() {
-	printf("this is Grad LinuxTM\nenjoy\n");
-	while (1) ;
+	printf(1, "this is Grad LinuxTM\nenjoy\n", 27);
+	while (1) {}
 	return 0;
 }

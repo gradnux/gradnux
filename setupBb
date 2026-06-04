@@ -2,7 +2,7 @@
 test -f .bbcfg
 hasCfg=$?
 if [ $hasCfg -eq 0 ]; then
-	mv .bbcfg bb/.config
+	mv .bbcfg busybox/.config
 fi
 if [ $hasCfg -eq 1 ]; then
 	echo "give me busybox config"

@@ -49,7 +49,7 @@ jobs:
                   sudo make install
                   # mmh, sudo
                   cd ..
-                  sed -i /opt/musl/include/bit/alltypes.h -e "s/__builtin_va_list/char*/g"
+                  sed -i /opt/musl/include/bits/alltypes.h -e "s/__builtin_va_list/char*/g"
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/

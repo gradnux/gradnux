@@ -49,9 +49,11 @@ jobs:
                   sudo make install
                   # mmh, sudo
                   cd ..
+                  sed -i /opt/musl/include/bit/alltypes.h -e "s/__builtin_va_list/char*/g"
                   cp -r /opt/musl/* rootfs/opt
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
+                  tree /opt/musl
             # binutils is useless for tcc as tcc does everything itself. :)
             # - name: build binutils
             #   run: |
@@ -96,7 +98,7 @@ jobs:
                   cd rootfs
                   mkdir -p {bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
                   chmod 1777 tmp
-                  ln -s ../opt/bin/busybox bin/sh
+                  ln -s ../opt/bin bin
                   tree > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out
                   cd ..

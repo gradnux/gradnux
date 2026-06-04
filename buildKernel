@@ -8,6 +8,7 @@ cd kernel
 if [ $hasCfg -eq 1 ]; then
 	make defconfig
 fi
+make oldconfig
 make -j$(nproc)
 code=$?
 mv .config ..

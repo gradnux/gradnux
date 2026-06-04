@@ -83,6 +83,7 @@ jobs:
               run: |
                   ./setupBb
                   cd busybox
+                  make oldconfig
                   CROSS_COMPILE=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/

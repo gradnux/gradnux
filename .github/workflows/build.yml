@@ -84,7 +84,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  CROSS_COMPILE=/opt/musl/bin/musl- CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all

@@ -71,7 +71,7 @@ jobs:
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
                   ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no
-                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static -DBCHECK=0" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
+                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mkdir -p ../rootfs/opt/tcc
                   mkdir -p ../rootfs/opt/tcc/lib/tcc
@@ -85,7 +85,7 @@ jobs:
                   make defconfig
                   sed -E -i "s/CONFIG_TC=[ynm]/CONFIG_TC=n/" .config
                   sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
-                  CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="--static" make -j$(nproc)
+                  CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all

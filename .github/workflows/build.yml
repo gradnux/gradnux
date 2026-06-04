@@ -81,16 +81,15 @@ jobs:
                   cd ..
             - name: build busybox
               run: |
+                  ./setupBb
                   cd busybox
-                  make defconfig
-                  sed -E -i "s/CONFIG_TC=[ynm]/CONFIG_TC=n/" .config
-                  sed -E -i "s/CONFIG_STATIC=[ynm]/CONFIG_STATIC=y/" .config
-                  CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CROSS_COMPILE=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all
                   cp -a ~/bb/bin/* ../rootfs/opt/bin/
                   cd ..
+                  file rootfs/opt/bin/busybox
             - name: build final image?
               run: |
                   cd rootfs

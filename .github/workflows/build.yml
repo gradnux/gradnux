@@ -96,9 +96,10 @@ jobs:
             - name: build final image?
               run: |
                   cd rootfs
-                  mkdir -p {bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
+                  mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
                   chmod 1777 tmp
-                  ln -s ../opt/bin ./bin
+                  rm -rf bin
+                  ln -sT ../opt/bin ./bin
                   tree > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out
                   cd ..

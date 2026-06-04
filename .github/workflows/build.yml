@@ -15,7 +15,7 @@ jobs:
                   # host helpers
                   sudo apt install -y build-essential gcc aria2
                   # kernel
-                  sudo apt install -y ccache build-essential flex bison libncurses-dev libssl-dev libelf-dev
+                  sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup
               run: |
                   mkdir -p {musl,busybox} rootfs/opt rootfs/usr
@@ -98,7 +98,7 @@ jobs:
                   cd rootfs
                   mkdir -p {bin,dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
                   chmod 1777 tmp
-                  ln -s ../opt/bin bin
+                  ln -s ../opt/bin ./bin
                   tree > /tmp/out 2>&1 && cat /tmp/out
                   rm /tmp/out
                   cd ..

@@ -50,7 +50,7 @@ jobs:
                   # mmh, sudo
                   cd ..
                   sed -i /opt/musl/include/bits/alltypes.h -e "s/__builtin_va_list/char*/g"
-                  cp -r /opt/musl/* rootfs/opt
+                  cp -a /opt/musl rootfs/opt/
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
                   tree /opt/musl

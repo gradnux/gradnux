@@ -13,12 +13,12 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc aria2
+                  sudo apt install -y build-essential gcc aria2 musl musl-tools
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup
               run: |
-                  mkdir -p {musl,busybox} rootfs/opt rootfs/usr
+                  mkdir -p {musl,busybox} rootfs/opt/bin rootfs/usr
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
@@ -44,7 +44,9 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
+                  CC=musl-gcc AR=musl-ar RANLIB=musl-ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
+                  sudo apt remove -y musl musl-tools
+                  # dont want my musl overwritten by apt musl
                   make -j$(nproc)
                   sudo make install
                   # mmh, sudo

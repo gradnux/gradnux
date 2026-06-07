@@ -19,7 +19,7 @@ jobs:
             - name: setup
               run: |
                   mkdir -p {musl,busybox} rootfs/opt/bin rootfs/usr
-                  aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.2.tar.gz" -o musl.tar.gz
+                  aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.6.tar.gz" -o musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1

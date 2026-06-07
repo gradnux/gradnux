@@ -93,7 +93,7 @@ jobs:
                   cd ..
                   for a in "$(find ~/bb -type l -printf "%f " | sed "s/ *$//")"; do
                       ln -sT busybox "rootfs/opt/bin/$a"
-                  end
+                  done
                   file rootfs/opt/bin/busybox
                   ls -la rootfs/opt/bin
             - name: build final image?

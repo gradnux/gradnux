@@ -52,9 +52,7 @@ jobs:
                   # mmh, sudo
                   cd ..
                   # sed -i /opt/musl/include/bits/alltypes.h -e "s/^.*__builtin_va_list/\/\/ nope/g"
-                  cp -a /opt/musl rootfs/opt/
-                  cp -a /opt/musl ~/musl
-                  mv ~/musl /opt/
+                  cp -a /opt/musl rootfs/opt/musl
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
                   tree /opt/musl
@@ -76,7 +74,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no
+                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/musl/lib --sysincludepaths=/opt/musl/include --enable-static --config-bcheck=no
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mkdir -p ../rootfs/opt/tcc

@@ -53,6 +53,7 @@ jobs:
                   cd ..
                   # sed -i /opt/musl/include/bits/alltypes.h -e "s/^.*__builtin_va_list/\/\/ nope/g"
                   cp -a /opt/musl rootfs/opt/
+                  cp -a /opt/musl /opt/
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
                   tree /opt/musl

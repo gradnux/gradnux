@@ -72,7 +72,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no --cflags="-static" --ldflags="-static" --config-static=yes
+                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mkdir -p ../rootfs/opt/tcc
@@ -90,9 +90,12 @@ jobs:
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all
-                  cp -a ~/bb/bin/* ../rootfs/opt/bin/
                   cd ..
+                  for a in "$(find ~/bb -type l -printf "%f " | sed "s/ *$//")"; do
+                      ln -sT busybox "rootfs/opt/bin/$a"
+                  end
                   file rootfs/opt/bin/busybox
+                  ls -la rootfs/opt/bin
             - name: build final image?
               run: |
                   cd rootfs

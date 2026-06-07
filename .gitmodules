@@ -6,4 +6,4 @@
 	url = https://github.com/systemd/systemd/
 [submodule "tcc"]
 	path = tcc
-	url = https://github.com/mirror/tinycc/
+	url = https://repo.or.cz/tinycc.git

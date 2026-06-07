@@ -13,9 +13,15 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc aria2 musl musl-dev musl-tools
+                  sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+            - name: setup ccache
+              uses: actions/cache@v4
+              with:
+                  path: ./kernel
+                  key: kernel-ccache
+                  restore-keys: kernel-ccache
             - name: setup
               run: |
                   mkdir -p {musl,busybox} rootfs/opt/bin rootfs/usr
@@ -29,12 +35,6 @@ jobs:
                   # echo "yarrrr i struck GÖLD!!!!"
                   # yes i got the binutils with gold
                   git submodule update --init --recursive --depth 1
-            - name: setup ccache
-              uses: actions/cache@v4
-              with:
-                  path: ./kernel
-                  key: kernel-ccache
-                  restore-keys: kernel-ccache
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -44,10 +44,8 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=musl-gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
+                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
-                  sudo apt remove -y musl musl-dev musl-tools
-                  # dont want my musl overwritten by apt musl
                   sudo make install
                   # mmh, sudo
                   cd ..
@@ -74,7 +72,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no
+                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/lib --sysincludepaths=/opt/include --enable-static --config-bcheck=no --cflags="-static" --ldflags="-static" --config-static=yes
                   make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mkdir -p ../rootfs/opt/tcc

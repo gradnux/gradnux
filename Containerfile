@@ -8,9 +8,8 @@ ENV PATH="/opt/tcc:/opt/tcc/lib:/opt/tcc/lib/tcc:/opt/bin:/sbin:/bin:${PATH}"
 
 RUN printenv
 
-# RUN ["tcc", "/sbin/init.c", "-o", "/sbin/init", "-nostdinc", "-isystem /opt/tcc/lib/tcc/include"]
+RUN tcc /sbin/init.c -o /sbin/init -Wl,-dynamic-linker=/opt/musl/lib/libc.so -L/opt/musl/lib
 
-RUN mv /sbin/initScript /sbin/init
-
+# RUN mv /sbin/initScript /sbin/init
 
 CMD ["/sbin/init"]

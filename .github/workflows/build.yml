@@ -16,6 +16,14 @@ jobs:
                   sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+            - name: setup ccache
+              uses: actions/cache@v4
+              with:
+                  path: |
+                      kernel
+                      .git/modules/kernel
+                  key: kernel-ccache
+                  restore-keys: kernel-ccache
             - name: setup
               run: |
                   mkdir -p {musl,busybox} rootfs/opt/bin rootfs/usr
@@ -29,14 +37,6 @@ jobs:
                   # echo "yarrrr i struck GÖLD!!!!"
                   # yes i got the binutils with gold
                   git submodule update --init --recursive --depth 1
-            - name: setup ccache
-              uses: actions/cache@v4
-              with:
-                  path: |
-                      kernel
-                      .git/modules/kernel
-                  key: kernel-ccache
-                  restore-keys: kernel-ccache
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -53,6 +53,7 @@ jobs:
                   cd ..
                   # sed -i /opt/musl/include/bits/alltypes.h -e "s/^.*__builtin_va_list/\/\/ nope/g"
                   cp -a /opt/musl rootfs/opt/musl
+                  rm -rf rootfs/opt/musl/bin
                   echo "/opt/musl/bin/" >> $GITHUB_PATH
                   # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
                   tree /opt/musl

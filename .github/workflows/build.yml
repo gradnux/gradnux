@@ -44,7 +44,7 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=/opt/musl/bin/musl-gcc AR=/opt/musl/bin/musl-ar RANLIB=/opt/musl/bin/musl-ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
+                  CC=musl-gcc AR=musl-ar RANLIB=musl-ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
                   make -j$(nproc)
                   sudo apt remove -y musl musl-dev musl-tools
                   # dont want my musl overwritten by apt musl

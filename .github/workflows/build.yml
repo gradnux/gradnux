@@ -91,7 +91,7 @@ jobs:
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all
                   cd ..
-                  for a in "$(find ~/bb -type l -printf "%f " | sed "s/ *$//")"; do
+                  for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
                       ln -sT busybox "rootfs/opt/bin/$a"
                   done
                   file rootfs/opt/bin/busybox

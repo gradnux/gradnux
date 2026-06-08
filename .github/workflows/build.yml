@@ -29,7 +29,6 @@ jobs:
             - name: setup
               run: |
                   cd rootfs
-                  cd rootfs
                   mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
                   cd ..
                   mkdir -p {musl,busybox}

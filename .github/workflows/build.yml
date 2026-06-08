@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc aria2
+                  sudo apt install -y build-essential gcc g++ aria2 musl-tools
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
@@ -92,7 +92,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC=musl-gcc AR=musl-ar CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
                   # just to make sure busybox is there and all
@@ -107,7 +107,7 @@ jobs:
                   cd aria2c
                   autoreconf -i
                   ./configure ARIA2_STATIC=yes CC=musl-gcc
-                  CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC=musl-gcc CXX=musl-g++ CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   mv src/aria2c ../rootfs/opt/bin/
                   cd ..
                   mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules

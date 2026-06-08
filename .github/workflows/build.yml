@@ -28,7 +28,11 @@ jobs:
                   restore-keys: kernel-ccache
             - name: setup
               run: |
-                  mkdir -p {musl,busybox} rootfs/opt/bin rootfs/usr
+                  cd rootfs
+                  cd rootfs
+                  mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
+                  cd ..
+                  mkdir -p {musl,busybox}
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.6.tar.gz" -o musl.tar.gz
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
@@ -48,44 +52,27 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl –enable-optimize=size
+                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=~/musl/ --target=x86_64-linux-musl –enable-optimize=size
                   # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
                   make -j$(nproc)
                   sudo make install
                   # mmh, sudo
                   cd ..
-                  # sed -i /opt/musl/include/bits/alltypes.h -e "s/^.*__builtin_va_list/\/\/ nope/g"
-                  cp -a /opt/musl rootfs/opt/musl
-                  rm -rf rootfs/opt/musl/bin
-                  echo "/opt/musl/bin/" >> $GITHUB_PATH
-                  # cp /lib/ld-musl-x86_64.so.1 rootfs/lib/
-                  tree /opt/musl
-            # binutils is useless for tcc as tcc does everything itself. :)
-            # - name: build binutils
-            #   run: |
-            #       cd binutils
-            #       ./configure --prefix=/opt/binutils --disable-nls --disable-werror --disable-multilib --enable-gold --enable-static --disable-shared LDFLAGS="-static -static-libgcc"
-            #       make configure-host
-            #       CC=/opt/musl/bin/musl-gcc CXX=/opt/musl/bin/musl-g++ AR=/opt/musl/bin/musl-ar make -j$(nproc) LDFLAGS="--static"
-            #       make DESTDIR="$(realpath ./install)" install
-            #       file install/opt/binutils/bin/as
-            #       cp -L install/opt/binutils/bin/as ../rootfs/opt/bin/
-            #       cp -L install/opt/binutils/bin/ld ../rootfs/opt/bin/
-            #       cd ..
+                  cp -a ~/musl rootfs/usr
+                  rm -rf rootfs/usr/bin/musl-gcc
+                  cp -a ~/musl /usr
             - name: build tcc
               run: |
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=/opt/musl/bin/musl-gcc --prefix=/opt/tcc --libdir=/opt/tcc/lib --crtprefix=/opt/musl/lib --sysincludepaths=/opt/musl/include --enable-static --config-bcheck=no
-                  make CC=/opt/musl/bin/musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
+                  ./configure --cc=musl-gcc --prefix=/usr --libdir=/usr/lib --crtprefix=/usr/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
+                  make CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
-                  mkdir -p ../rootfs/opt/tcc
-                  mkdir -p ../rootfs/opt/tcc/lib/tcc
-                  mv ./tcc ../rootfs/opt/tcc/
-                  mv ./libtcc1.a ../rootfs/opt/tcc/lib/tcc/
-                  mv include ../rootfs/opt/tcc/lib/tcc/
+                  mv ./tcc ../rootfs/usr/bin/
+                  mv ./libtcc1.a ../rootfs/usr/lib/
+                  mv include ../rootfs/usr/
                   cd ..
             - name: build busybox
               run: |
@@ -94,32 +81,28 @@ jobs:
                   make oldconfig
                   CC=musl-gcc AR=musl-ar CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
-                  cp -a ~/bb/bin/busybox ../rootfs/opt/bin/
-                  # just to make sure busybox is there and all
                   cd ..
+                  cp -a ~/bb/bin/busybox rootfs/usr/bin/
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
-                      ln -sT busybox "rootfs/opt/bin/$a"
+                      ln -sT busybox "rootfs/usr/bin/$a"
                   done
-                  file rootfs/opt/bin/busybox
-                  ls -la rootfs/opt/bin
-            - name: build aria2c
-              run: |
-                  cd aria2c
-                  autoreconf -i
-                  ./configure ARIA2_STATIC=yes CC=musl-gcc
-                  CC=musl-gcc CXX=musl-g++ CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
-                  mv src/aria2c ../rootfs/opt/bin/
-                  cd ..
-                  mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules
-                  cp /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-gnu/ossl-modules/
-                  tree rootfs/usr/lib/x86_64-linux-gnu/
+            # later
+            # - name: build aria2c
+            #   run: |
+            #       cd aria2c
+            #       autoreconf -i
+            #       ./configure ARIA2_STATIC=yes CC=musl-gcc
+            #       CC=musl-gcc CXX=musl-g++ CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+            #       mv src/aria2c ../rootfs/opt/bin/
+            #       cd ..
+            #       mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules
+            #       cp /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-musl/ossl-modules/
+            #       tree rootfs/usr/lib/
             - name: build final image?
               run: |
-                  cd rootfs
-                  mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
                   chmod 1777 tmp
                   rm -rf bin
-                  ln -sT ../opt/bin ./bin
+                  ln -sT ../usr/bin ./bin
                   cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

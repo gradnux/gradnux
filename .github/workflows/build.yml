@@ -112,6 +112,7 @@ jobs:
                   cd ..
                   mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules
                   cp /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-gnu/ossl-modules/
+                  tree rootfs/usr/lib/x86_64-linux-gnu/
             - name: build final image?
               run: |
                   cd rootfs

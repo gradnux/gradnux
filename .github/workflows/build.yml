@@ -17,7 +17,7 @@ jobs:
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
-                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev
+                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev libssl3
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -110,6 +110,7 @@ jobs:
                   make -j$(nproc)
                   mv src/aria2c ../rootfs/opt/bin/
                   cd ..
+                  mv /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-gnu/ossl-modules/
             - name: build final image?
               run: |
                   cd rootfs

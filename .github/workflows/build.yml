@@ -16,6 +16,8 @@ jobs:
                   sudo apt install -y build-essential gcc aria2
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+                  # aria2c
+                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -46,7 +48,8 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl
+                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=/opt/musl --target=x86_64-linux-musl –enable-optimize=size
+                  # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
                   make -j$(nproc)
                   sudo make install
                   # mmh, sudo
@@ -99,6 +102,14 @@ jobs:
                   done
                   file rootfs/opt/bin/busybox
                   ls -la rootfs/opt/bin
+            - name: build aria2c
+              run: |
+                  cd aria2c
+                  autoreconf -i
+                  ./configure ARIA2_STATIC=yes
+                  make -j$(nproc)
+                  mv src/aria2c ../rootfs/opt/bin/
+                  cd ..
             - name: build final image?
               run: |
                   cd rootfs
@@ -106,8 +117,6 @@ jobs:
                   chmod 1777 tmp
                   rm -rf bin
                   ln -sT ../opt/bin ./bin
-                  tree > /tmp/out 2>&1 && cat /tmp/out
-                  rm /tmp/out
                   cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

@@ -7,3 +7,6 @@
 [submodule "tcc"]
 	path = tcc
 	url = https://repo.or.cz/tinycc.git
+[submodule "aria2c"]
+	path = aria2c
+	url = https://github.com/aria2/aria2.git

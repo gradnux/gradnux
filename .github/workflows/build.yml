@@ -17,7 +17,7 @@ jobs:
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
-                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev
+                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev
             - name: setup ccache
               uses: actions/cache@v4
               with:

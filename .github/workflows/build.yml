@@ -106,12 +106,12 @@ jobs:
               run: |
                   cd aria2c
                   autoreconf -i
-                  ./configure ARIA2_STATIC=yes
+                  ./configure ARIA2_STATIC=yes CC=musl-gcc
                   CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   mv src/aria2c ../rootfs/opt/bin/
                   cd ..
                   mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules
-                  mv /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-gnu/ossl-modules/
+                  cp /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-gnu/ossl-modules/
             - name: build final image?
               run: |
                   cd rootfs

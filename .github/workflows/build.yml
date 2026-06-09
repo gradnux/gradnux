@@ -55,13 +55,12 @@ jobs:
                   # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
                   make -j$(nproc)
                   make install
-                  # mmh, sudo
                   cd ..
                   tree ~/musl/
                   cp -r ~/musl/. rootfs/usr
-                  cp -r ~/musl/. /usr
-                  rm rootfs/usr/*/musl-* || true
-                  false
+                  sudo cp -r ~/musl/. /usr
+                  # mmh, sudo
+                  rm rootfs/usr/bin/musl-* || true
             - name: build tcc
               run: |
                   cd tcc

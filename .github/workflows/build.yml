@@ -73,7 +73,7 @@ jobs:
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/
-                  mv include/. ../rootfs/usr/include/
+                  cp include/. ../rootfs/usr/include/
                   cd ..
             - name: build busybox
               run: |

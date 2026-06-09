@@ -75,7 +75,7 @@ jobs:
                   echo "echo \"\$@\" > $PWD/comp.log" > testCompile
                   echo "musl-gcc \"\$@\" -nostdinc -I~/musl/include" > testCompile
                   chmod +x testCompile
-                  ./configure --cc="./testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
+                  ./configure --cc="$PWD/testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
                   cat $PWD/comp.log && exit 1
                   make CC="./testCompile" CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc

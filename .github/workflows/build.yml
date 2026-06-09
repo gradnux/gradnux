@@ -71,10 +71,12 @@ jobs:
                   ls -la ~/musl/lib/
                   touch comp.log
                   touch testCompile
-                  echo "#!/usr/bin/env bash" >> testCompile
-                  echo "echo \"\$@\" >> \"$PWD\"/comp.log" >> testCompile
-                  echo "musl-gcc -I\"$HOME\"/musl/include \"\$@\" >>\"$PWD\"/comp.log 2>&1" >> testCompile
-                  echo "exit \$?" >> testCompile
+                  cat > testCompile <<'EOF'
+                  #!/usr/bin/env bash
+                  HERE="$(dirname "$0")"
+                  echo "$@" >> "$HERE/comp.log"
+                  exec musl-gcc -I"$HOME/musl/include" "$@" >>"$HERE/comp.log" 2>&1
+                  EOF
                   chmod +x testCompile
                   ./configure --cc="$PWD/testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
                   cat $PWD/comp.log && exit 1

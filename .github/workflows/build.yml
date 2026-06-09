@@ -59,7 +59,7 @@ jobs:
                   cd ..
                   cp -r ~/musl/. rootfs/usr
                   cp -r ~/musl/. /usr
-                  rm rootfs/usr/bin/musl-*
+                  rm rootfs/usr/*/musl-* || true
             - name: build tcc
               run: |
                   cd tcc

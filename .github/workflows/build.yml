@@ -73,7 +73,7 @@ jobs:
                   touch testCompile
                   echo "#!/usr/bin/env bash" >> testCompile
                   echo "echo \"\$@\" >> $PWD/comp.log" >> testCompile
-                  echo "exec musl-gcc -I\"$HOME\"/musl/include \"\$@\"" >> testCompile
+                  echo "exec musl-gcc -I\"$HOME\"/musl/include \"\$@\" >>"$PWD/comp.log" 2>&1" >> testCompile
                   chmod +x testCompile
                   ./configure --cc="$PWD/testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
                   cat $PWD/comp.log && exit 1

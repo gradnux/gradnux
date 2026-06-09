@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc g++ aria2 musl-tools
+                  sudo apt install -y build-essential gcc g++ aria2
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
@@ -80,7 +80,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC=musl-gcc CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
                   cp -a ~/bb/bin/busybox rootfs/bin/

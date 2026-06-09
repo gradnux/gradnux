@@ -51,7 +51,7 @@ jobs:
             - name: build musl
               run: |
                   cd musl
-                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix=~/musl/ --target=x86_64-linux-musl –enable-optimize=size
+                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix="$HOME"/musl/ --target=x86_64-linux-musl –enable-optimize=size
                   # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
                   make -j$(nproc)
                   make install
@@ -67,6 +67,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
+                  ls -la ~/musl/lib/
                   ./configure --cc=musl-gcc --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
                   make CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc

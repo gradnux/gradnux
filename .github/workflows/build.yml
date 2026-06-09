@@ -75,7 +75,8 @@ jobs:
                   #!/usr/bin/env bash
                   HERE="$(dirname "$0")"
                   echo "$@" >> "$HERE/comp.log"
-                  exec musl-gcc -I"$HOME/musl/include" "$@" >>"$HERE/comp.log" 2>&1
+                  musl-gcc -I"$HOME/musl/include" "$@" >>"$HERE/comp.log" 2>&1
+                  exit $?
                   EOF
                   chmod +x testCompile
                   ./configure --cc="$PWD/testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no

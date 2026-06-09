@@ -73,10 +73,10 @@ jobs:
                   touch testCompile
                   cat > testCompile <<'EOF'
                   #!/usr/bin/env bash
-                  HERE="$(dirname "$0")"
+                  HERE="$(dirname "$BASH_SOURCE")"
                   echo "$@" >> "$HERE/comp.log"
                   echo "start" >> "$HERE/comp.log"
-                  musl-gcc -I"$HOME/musl/include" "$@" >>"$HERE/comp.log" 2>&1
+                  musl-gcc "$@" >>"$HERE/comp.log" 2>&1
                   S=$?
                   echo "end" >> "$HERE/comp.log"
                   exit $S

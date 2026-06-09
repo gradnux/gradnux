@@ -69,14 +69,19 @@ jobs:
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
                   ls -la ~/musl/lib/
-                  which musl-gcc
-                  CFLAGS="-nostdinc -I~/musl/include" CC="musl-gcc" ./configure --cc=musl-gcc --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
+                  touch testCompile
+                  echo "#!/usr/bin/env bash" > testCompile
+                  echo "echo \"\$@\"" > testCompile
+                  echo "musl-gcc \"\$@\"" > testCompile
+                  chmod +x testCompile
+                  CFLAGS="-nostdinc -I~/musl/include" CC="./testCompile" ./configure --cc=musl-gcc --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
                   make CC=musl-gcc CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/
                   cp -rf include/. ../rootfs/usr/include/
                   cd ..
+                  false
             - name: build busybox
               run: |
                   ./setupBb

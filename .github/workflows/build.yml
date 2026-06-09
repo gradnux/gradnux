@@ -57,9 +57,9 @@ jobs:
                   sudo make install
                   # mmh, sudo
                   cd ..
-                  cp -a ~/musl rootfs/usr
-                  rm -rf rootfs/usr/bin/musl-gcc
-                  cp -a ~/musl /usr
+                  cp -a ~/musl/. rootfs/usr
+                  cp -a ~/musl/. /usr
+                  rm rootfs/usr/bin/musl-*
             - name: build tcc
               run: |
                   cd tcc
@@ -81,9 +81,9 @@ jobs:
                   CC=musl-gcc AR=musl-ar CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
-                  cp -a ~/bb/bin/busybox rootfs/usr/bin/
+                  cp -a ~/bb/bin/busybox rootfs/bin/
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
-                      ln -sT busybox "rootfs/usr/bin/$a"
+                      ln -sT busybox "rootfs/bin/$a"
                   done
             # later
             # - name: build aria2c
@@ -99,9 +99,11 @@ jobs:
             #       tree rootfs/usr/lib/
             - name: build final image?
               run: |
+                  cd rootfs
                   chmod 1777 tmp
-                  rm -rf bin
-                  ln -sT ../usr/bin ./bin
+                  mv usr/bin/. bin
+                  rm usr/bin
+                  ln -sT ../../bin usr/bin
                   cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

@@ -72,10 +72,10 @@ jobs:
                   touch compLog
                   touch testCompile
                   echo "#!/usr/bin/env bash" > testCompile
-                  echo "echo \"\$@\" > comp.log" > testCompile
-                  echo "musl-gcc \"\$@\"" > testCompile
+                  echo "echo \"\$@\" > $PWD/comp.log" > testCompile
+                  echo "musl-gcc \"\$@\" -nostdinc -I~/musl/include" > testCompile
                   chmod +x testCompile
-                  CFLAGS="-nostdinc -I~/musl/include" ./configure --cc="./testCompile" --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no || true
+                  ./configure --cc="./testCompile" --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no || true
                   cat comp.log && false
                   make CC="./testCompile" CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc

@@ -69,7 +69,7 @@ jobs:
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
                   ls -la ~/musl/lib/
-                  touch compLog
+                  touch comp.log
                   touch testCompile
                   echo "#!/usr/bin/env bash" > testCompile
                   echo "echo \"\$@\" > $PWD/comp.log" > testCompile

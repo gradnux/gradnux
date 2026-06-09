@@ -69,6 +69,7 @@ jobs:
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
                   ls -la ~/musl/lib/
+                  which musl-gcc
                   CFLAGS="-nostdinc -I~/musl/include" CC="musl-gcc" ./configure --cc=musl-gcc --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
                   make CC=musl-gcc CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc

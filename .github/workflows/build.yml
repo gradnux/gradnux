@@ -80,7 +80,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  CC=musl-gcc AR=musl-ar CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
                   cp -a ~/bb/bin/busybox rootfs/bin/

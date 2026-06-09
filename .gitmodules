@@ -1,12 +1,12 @@
 [submodule "kernel"]
 	path = kernel
 	url = https://github.com/torvalds/linux.git
-[submodule "systemd"]
-	path = systemd
-	url = https://github.com/systemd/systemd/
 [submodule "tcc"]
 	path = tcc
 	url = https://repo.or.cz/tinycc.git
 [submodule "aria2c"]
 	path = aria2c
 	url = https://github.com/aria2/aria2.git
+[submodule "systemd"]
+	path = systemd
+	url = https://github.com/systemd/systemd.git

@@ -57,8 +57,8 @@ jobs:
                   sudo make install
                   # mmh, sudo
                   cd ..
-                  cp ~/musl/. rootfs/usr
-                  cp ~/musl/. /usr
+                  cp -r ~/musl/. rootfs/usr
+                  cp -r ~/musl/. /usr
                   rm rootfs/usr/bin/musl-*
             - name: build tcc
               run: |

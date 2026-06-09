@@ -56,11 +56,11 @@ jobs:
                   make -j$(nproc)
                   make install
                   cd ..
-                  tree ~/musl/
                   cp -r ~/musl/. rootfs/usr
                   sudo cp -r ~/musl/. /usr
                   # mmh, sudo
-                  rm rootfs/usr/bin/musl-* || true
+                  rm rootfs/usr/bin/musl-gcc || true
+                  tree ~/musl/
             - name: build tcc
               run: |
                   cd tcc

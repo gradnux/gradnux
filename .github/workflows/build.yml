@@ -69,12 +69,14 @@ jobs:
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
                   ls -la ~/musl/lib/
+                  touch compLog
                   touch testCompile
                   echo "#!/usr/bin/env bash" > testCompile
-                  echo "echo \"\$@\"" > testCompile
+                  echo "echo \"\$@\" > comp.log" > testCompile
                   echo "musl-gcc \"\$@\"" > testCompile
                   chmod +x testCompile
-                  CFLAGS="-nostdinc -I~/musl/include" ./configure --cc="./testCompile" --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
+                  CFLAGS="-nostdinc -I~/musl/include" ./configure --cc="./testCompile" --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no || true
+                  cat comp.log && false
                   make CC="./testCompile" CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/

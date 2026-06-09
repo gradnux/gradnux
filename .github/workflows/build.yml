@@ -57,8 +57,8 @@ jobs:
                   sudo make install
                   # mmh, sudo
                   cd ..
-                  cp -a ~/musl/. rootfs/usr
-                  cp -a ~/musl/. /usr
+                  cp ~/musl/. rootfs/usr
+                  cp ~/musl/. /usr
                   rm rootfs/usr/bin/musl-*
             - name: build tcc
               run: |
@@ -66,7 +66,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=musl-gcc --prefix=/usr --libdir=/usr/lib --crtprefix=/usr/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
+                  ./configure --cc=musl-gcc --prefix=/ --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
                   make CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
@@ -101,9 +101,11 @@ jobs:
               run: |
                   cd rootfs
                   chmod 1777 tmp
-                  mv usr/bin/. bin
-                  rm usr/bin
-                  ln -sT ../../bin usr/bin
+                  for a in {bin,lib}; do
+                      mv usr/"$a"/. "$a"
+                      rm usr/"$a"
+                      ln -sT ../../"$a" usr/"$a"
+                  done
                   cd ..
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar gradnux:latest

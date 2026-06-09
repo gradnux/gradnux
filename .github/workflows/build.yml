@@ -60,13 +60,15 @@ jobs:
                   cp -r ~/musl/. rootfs/usr
                   cp -r ~/musl/. /usr
                   rm rootfs/usr/*/musl-* || true
+                  tree ~/musl/
+                  false
             - name: build tcc
               run: |
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   # brute force turn off bcheck (hopefully this works?)
-                  ./configure --cc=musl-gcc --prefix=/ --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
+                  ./configure --cc=musl-gcc --prefix="" --libdir=/lib --crtprefix=/lib --sysincludepaths=/usr/include --enable-static --config-bcheck=no
                   make CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/

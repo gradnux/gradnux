@@ -112,6 +112,8 @@ jobs:
                       ln -sT ../../"$a" usr/"$a"
                   done
                   cd ..
+                  tree rootfs
+                  exit 1
                   # lets use sudo for safety measures
                   sudo podman build -t gradnuxbase:latest .
                   sudo podman create --name container gradnuxbase:latest

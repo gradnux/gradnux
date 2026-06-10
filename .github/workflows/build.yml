@@ -107,7 +107,7 @@ jobs:
                   cd rootfs
                   chmod 1777 tmp
                   for a in {bin,lib}; do
-                      cp usr/"$a"/. "$a"
+                      cp -r usr/"$a"/. "$a"
                       rm -rf usr/"$a"
                       ln -sT ../../"$a" usr/"$a"
                   done

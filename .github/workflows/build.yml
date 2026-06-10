@@ -29,7 +29,7 @@ jobs:
             - name: setup
               run: |
                   cd rootfs
-                  mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp}
+                  mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp,bin}
                   cd ..
                   mkdir -p {musl,busybox} ~/musl/
                   aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.6.tar.gz" -o musl.tar.gz
@@ -64,7 +64,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="" --sysincludepaths="/usr/include" --bindir="/bin" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r ~/musl/include /usr/include
                   # gaslight tcc into believing musl is here
@@ -86,9 +86,9 @@ jobs:
                   CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
-                  cp -a ~/bb/bin/busybox rootfs/usr/bin/
+                  cp -a ~/bb/bin/busybox rootfs/bin/
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
-                      ln -sT busybox "rootfs/usr/bin/$a"
+                      ln -sT busybox "rootfs/bin/$a"
                   done
             # later
             # - name: build aria2c

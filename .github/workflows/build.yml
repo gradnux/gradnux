@@ -70,7 +70,7 @@ jobs:
                   # brute force turn off bcheck (hopefully this works?)
                   ls -la ~/musl/lib/
                   ./configure --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
-                  make CC="musl-gcc" CFLAGS="-static -I$HOME/musl/include" LDFLAGS="-static -I$HOME/musl/include" CONFIG_bcheck=no
+                  make CC="gcc" CFLAGS="-static -I$HOME/musl/include" LDFLAGS="-static -I$HOME/musl/include" CONFIG_bcheck=no
                   cat $PWD/comp.log && exit 1
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/

@@ -36,12 +36,8 @@ jobs:
                   tar -xf musl.tar.gz -C musl --strip-components=1
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
-                  # aria2c -j 16 -x 16 -s 16 "https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.gz" -o binutils.tar.bz2
-                  # if this dl is slow on my pc even with aria2c, it would prob be slow on gh actions runners
-                  # tar -xf binutils.tar.gz -C binutils --strip-components=1
-                  # echo "yarrrr i struck GÖLD!!!!"
-                  # yes i got the binutils with gold
                   git submodule update --init --recursive --depth 1
+                  # mv -r scavenge rootfs/tmp/scavenge
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -71,10 +67,11 @@ jobs:
                   CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r ~/musl/include /usr/include
+                  # gaslight tcc into believing musl is here
                   make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
-                  # glibc back into place, hurray!
+                  # glibc needs to get back here, unfortunately
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/
@@ -82,12 +79,10 @@ jobs:
                   cd ..
             - name: build busybox
               run: |
-                  echo "tcc succeeded, however i need to patch this as i did with tcc"
-                  false
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  CC=musl-gcc CFLAGS="-static -nostdinc -I~/musl/include" LDFLAGS="-static" make -j$(nproc)
+                  CC="musl-gcc -static" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
                   cp -a ~/bb/bin/busybox rootfs/bin/
@@ -116,8 +111,15 @@ jobs:
                       ln -sT ../../"$a" usr/"$a"
                   done
                   cd ..
-                  podman build -t gradnux:latest .
-                  podman save -o gradnux.tar gradnux:latest
+                  # lets use sudo for safety measures
+                  sudo podman build -t gradnuxBase:latest .
+                  sudo podman create --name container gradnuxBase:latest
+                  sudo podman start container
+                  sudo podman exec container echo "hey"
+                  sudo podman exec container busybox
+                  sudo podman exec container tcc -v
+                  sudo podman commit container gradnux:latest
+                  sudo podman save -o gradnux.tar gradnux:latest
             - name: upload image
               uses: actions/upload-artifact@v4
               with:

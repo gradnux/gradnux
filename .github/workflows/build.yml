@@ -68,14 +68,13 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  ./configure --cc="musl-gcc --sysroot=$HOME/musl" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
-                  make CC="musl-gcc --sysroot=$HOME/musl" CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no
+                  ./configure --cc="musl-gcc" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
+                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/
                   cp -rf include/. ../rootfs/usr/include/
                   cd ..
-                  false
             - name: build busybox
               run: |
                   echo "tcc succeeded, however i need to patch this as i did with tcc"

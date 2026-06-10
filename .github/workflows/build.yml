@@ -86,9 +86,9 @@ jobs:
                   CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   cd ..
-                  cp -a ~/bb/bin/busybox rootfs/bin/
+                  cp -a ~/bb/bin/busybox rootfs/usr/bin/
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
-                      ln -sT busybox "rootfs/bin/$a"
+                      ln -sT busybox "rootfs/usr/bin/$a"
                   done
             # later
             # - name: build aria2c

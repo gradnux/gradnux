@@ -76,15 +76,15 @@ jobs:
                   HERE="$(dirname "$BASH_SOURCE")"
                   echo "$@" >> "$HERE/comp.log"
                   echo "start" >> "$HERE/comp.log"
-                  musl-gcc "$@" >>"$HERE/comp.log" 2>&1
+                  musl-gcc -static "$@" >>"$HERE/comp.log" 2>&1
                   S=$?
                   echo "end" >> "$HERE/comp.log"
                   exit $S
                   EOF
                   chmod +x testCompile
-                  ./configure --cc="$PWD/testCompile" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
+                  ./configure --cc="gcc" --prefix="/usr" --sysincludepaths=/usr/include --bindir=/usr/bin --enable-static --config-bcheck=no
+                  make CC="$PWD/testCompile" CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   cat $PWD/comp.log && exit 1
-                  make CC="./testCompile" CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/

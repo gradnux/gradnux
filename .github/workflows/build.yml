@@ -57,21 +57,19 @@ jobs:
                   make install
                   cd ..
                   cp -r ~/musl/. rootfs/usr
-                  sudo cp -r ~/musl/. /usr
-                  # mmh, sudo
                   rm rootfs/usr/bin/musl-gcc || true
-                  tree ~/musl/
                   echo "$HOME/musl/bin" >> $GITHUB_PATH
+                  echo "$LD_LIBRARY_PATH"
+                  echo "LD_LIBRARY_PATH=$HOME/musl/lib" >> $GITHUB_ENV
+                  echo "CC=$HOME/musl/bin/musl-gcc" >> $GITHUB_ENV
             - name: build tcc
               run: |
+                  set -euo pipefail
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  # brute force turn off bcheck (hopefully this works?)
-                  ls -la ~/musl/lib/
-                  ./configure --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
-                  make CC="gcc" CFLAGS="-static -I$HOME/musl/include" LDFLAGS="-static -I$HOME/musl/include" CONFIG_bcheck=no
-                  cat $PWD/comp.log && exit 1
+                  ./configure --cc="musl-gcc --sysroot=$HOME/musl" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
+                  make CC="musl-gcc --sysroot=$HOME/musl" CFLAGS="-static" LDFLAGS="-static" CONFIG_bcheck=no
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/
@@ -80,6 +78,8 @@ jobs:
                   false
             - name: build busybox
               run: |
+                  echo "tcc succeeded, however i need to patch this as i did with tcc"
+                  false
                   ./setupBb
                   cd busybox
                   make oldconfig
@@ -96,7 +96,7 @@ jobs:
             #       cd aria2c
             #       autoreconf -i
             #       ./configure ARIA2_STATIC=yes CC=musl-gcc
-            #       CC=musl-gcc CXX=musl-g++ CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+            #       CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
             #       mv src/aria2c ../rootfs/opt/bin/
             #       cd ..
             #       mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules

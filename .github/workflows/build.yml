@@ -54,7 +54,8 @@ jobs:
                   CC=gcc AR=ar RANLIB=ranlib ./configure --prefix="$HOME"/musl/ --target=x86_64-linux-musl –enable-optimize=size
                   # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
                   make -j$(nproc)
-                  make install
+                  sudo make install
+                  # mmh, sudo
                   cd ..
                   cp -r ~/musl/. rootfs/usr
                   rm rootfs/usr/bin/musl-gcc || true

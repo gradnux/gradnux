@@ -64,12 +64,12 @@ jobs:
                   echo "CC=$HOME/musl/bin/musl-gcc" >> $GITHUB_ENV
             - name: build tcc
               run: |
-                  set -euo pipefail
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   ./configure --cc="musl-gcc" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
                   make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no
+                  file c2str.exe && exit 1
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/

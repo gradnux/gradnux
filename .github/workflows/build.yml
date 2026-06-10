@@ -69,9 +69,7 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
-                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no || true
-                  file c2str.exe
-                  ldd c2str.exe && exit 1
+                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/

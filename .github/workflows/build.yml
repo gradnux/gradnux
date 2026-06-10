@@ -114,8 +114,7 @@ jobs:
                   cd ..
                   # lets use sudo for safety measures
                   sudo podman build -t gradnuxbase:latest .
-                  sudo podman create --name container gradnuxbase:latest
-                  sudo podman start container
+                  sudo podman run -dit --name container gradnuxbase:latest
                   sudo podman exec container echo "hey"
                   sudo podman exec container busybox
                   sudo podman exec container tcc -v

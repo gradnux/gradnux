@@ -69,11 +69,11 @@ jobs:
                   rm lib/bcheck.c
                   touch lib/bcheck.c
                   CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --sysincludepaths="/usr/include" --bindir="/usr/bin" --enable-static --config-bcheck=no
-                  sudo mv /usr/include "$HOME"/glibcWompWomp/include
-                  sudo cp -r ~/musl/include /usr/
+                  sudo mv /usr/include "$HOME"/glibcWompWomp
+                  sudo cp -r ~/musl/include /usr/include
                   make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no tcc libtcc1.a
                   sudo rm -rf /usr/include
-                  sudo mv "$HOME"/glibcWompWomp/include /usr/include
+                  sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc back into place, hurray!
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/

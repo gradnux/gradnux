@@ -5,7 +5,7 @@ COPY rootfs/ /
 
 RUN env
 
-RUN tcc /sbin/init.c -o /sbin/init -Wl,-dynamic-linker=/lib/libc.so -L/lib
+RUN tcc /sbin/init.c -o /sbin/init
 
 # RUN aria2c --verbose
 # RUN aria2c -j 16 -x 16 -s 16 "https://http.cat/200.jpg" -o okay.jpg

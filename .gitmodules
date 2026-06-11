@@ -10,3 +10,6 @@
 [submodule "systemd"]
 	path = systemd
 	url = https://github.com/systemd/systemd.git
+[submodule "scavenge"]
+	path = scavenge
+	url = https://github.com/gradnux/scavenge.git

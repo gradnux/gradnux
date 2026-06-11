@@ -37,7 +37,7 @@ jobs:
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   git submodule update --init --recursive --depth 1
-                  # mv -r scavenge rootfs/tmp/scavenge
+                  mv -r scavenge rootfs/tmp/scavenge
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -64,7 +64,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r ~/musl/include /usr/include
                   # gaslight tcc into believing musl is here
@@ -120,9 +120,8 @@ jobs:
                   # lets use sudo for safety measures
                   sudo podman build -t gradnuxbase:latest .
                   sudo podman run -dit --name container gradnuxbase:latest
-                  sudo podman exec container echo "hey"
-                  sudo podman exec container busybox
                   sudo podman exec container tcc -v
+                  sudo podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd /"
                   sudo podman commit container gradnux:latest
                   sudo podman save -o gradnux.tar gradnux:latest
             - name: upload image

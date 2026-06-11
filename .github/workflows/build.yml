@@ -86,7 +86,7 @@ jobs:
                   CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/
-                  cp doc/busybox.1 ../rootfs/usr/share/man/man1/busybox.1
+                  cp docs/busybox.1 ../rootfs/usr/share/man/man1/busybox.1
                   cd ..
                   # "You will probably need to make your busybox binary setuid root to ensure all configured applets will work properly."
                   sudo chown root ~/bb/bin/busybox

@@ -37,7 +37,7 @@ jobs:
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   git submodule update --init --recursive --depth 1
-                  mv -r scavenge rootfs/tmp/scavenge
+                  mv scavenge rootfs/tmp/scavenge
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G

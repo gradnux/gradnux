@@ -72,8 +72,10 @@ jobs:
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately
-                  make doc
-                  ls tcc.1 tcc-doc.*
+                  make tcc.1
+                  ls tcc.1 || true
+                  ls /usr/share/man/man1/tcc.1
+                  false
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/

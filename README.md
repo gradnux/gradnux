@@ -14,8 +14,9 @@ i can think of a bajillion mottos, here are some i'd like to share though:
 - [x] kernel
 - [x] musl
 - [x] busybox
-- [ ] aria2c
 - [x] tcc
+- [ ] scavenge
+- [ ] aria2c
 - [ ] (gnu) bash
 - [ ] systemd?
 - [ ] bootc?

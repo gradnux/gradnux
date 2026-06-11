@@ -3,10 +3,7 @@ FROM scratch
 
 COPY rootfs/ /
 
-ENV PATH="/usr/sbin:/usr/bin:${PATH}"
-# for literally anything (i guess) to work properly
-
-RUN printenv
+RUN env
 
 RUN tcc /sbin/init.c -o /sbin/init -Wl,-dynamic-linker=/lib/libc.so -L/lib
 

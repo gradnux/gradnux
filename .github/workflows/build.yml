@@ -13,7 +13,7 @@ jobs:
               run: |
                   sudo apt update -y
                   # host helpers
-                  sudo apt install -y build-essential gcc g++ aria2
+                  sudo apt install -y build-essential gcc aria2 texinfo perl
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
@@ -68,7 +68,8 @@ jobs:
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r ~/musl/include /usr/include
                   # gaslight tcc into believing musl is here
-                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no
+                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
+                  make doc
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately

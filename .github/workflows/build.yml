@@ -69,10 +69,11 @@ jobs:
                   sudo cp -r ~/musl/include /usr/include
                   # gaslight tcc into believing musl is here
                   make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
-                  make doc
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately
+                  make doc
+                  ls tcc.1 tcc-doc.*
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/usr/bin/
                   mv ./libtcc1.a ../rootfs/usr/lib/

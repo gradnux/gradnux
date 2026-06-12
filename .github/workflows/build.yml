@@ -16,8 +16,6 @@ jobs:
                   sudo apt install -y build-essential gcc aria2 texinfo perl
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
-                  # aria2c
-                  sudo apt install -y libxml2-dev libcppunit-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev libssl3
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -95,18 +93,6 @@ jobs:
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
                       ln -sT busybox "rootfs/bin/$a"
                   done
-            # later
-            # - name: build aria2c
-            #   run: |
-            #       cd aria2c
-            #       autoreconf -i
-            #       ./configure ARIA2_STATIC=yes CC=musl-gcc
-            #       CC=musl-gcc CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
-            #       mv src/aria2c ../rootfs/opt/bin/
-            #       cd ..
-            #       mkdir -p rootfs/usr/lib/x86_64-linux-gnu/ossl-modules
-            #       cp /usr/lib/x86_64-linux-gnu/ossl-modules/legacy.so rootfs/usr/lib/x86_64-linux-musl/ossl-modules/
-            #       tree rootfs/usr/lib/
             - name: build final image?
               run: |
                   cd rootfs
@@ -121,7 +107,7 @@ jobs:
                   sudo podman build -t gradnuxbase:latest .
                   sudo podman run -dit --name container gradnuxbase:latest
                   sudo podman exec container tcc -v
-                  sudo podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd /"
+                  sudo podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge"
                   sudo podman commit container gradnux:latest
                   sudo podman save -o gradnux.tar gradnux:latest
             - name: upload image

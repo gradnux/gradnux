@@ -3,6 +3,8 @@ FROM scratch
 
 COPY rootfs/ /
 
+ENV LANG=en_US.UTF8 LC_ALL=en_US.UTF8
+
 RUN env
 
 RUN tcc /sbin/init.c -o /sbin/init

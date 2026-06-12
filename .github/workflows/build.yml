@@ -7,7 +7,7 @@ on:
         branches: main
 
 env:
-    PUSHERS: ${{ toJSON(["RixInGithub"]) }}
+    PUSHERS: '["RixInGithub"]'
 
 jobs:
     build:

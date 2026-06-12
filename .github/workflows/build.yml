@@ -1,6 +1,10 @@
 name: build Grad Linux™
 
-on: push
+on:
+    pull_request:
+        branches: main
+    push:
+        branches: main
 
 jobs:
     build:
@@ -112,8 +116,24 @@ jobs:
                   sudo podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge"
                   sudo podman commit container gradnux:latest
                   sudo podman save -o gradnux.tar gradnux:latest
-            - name: upload image
+            - name: upload state
               uses: actions/upload-artifact@v4
               with:
                   name: gradnuxImg
-                  path: ./gradnux.tar
+                  path: gradnux.tar
+            - name: login to ghcr
+              uses: docker/login-action@v4
+              if: github.event_name == "push" && github.actor == github.repository_owner
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            - name: push to ghcr
+              uses: redhat-actions/push-to-registry@v2
+              if: github.event_name == "push" && github.actor == github.repository_owner
+              with:
+                  registry: "ghcr.io/${{ github.actor }}"
+                  image: "${{ github.event.repository.name }}"
+                  tags: latest
+                  username: ${{ github.actor }}
+                  password: ${{ secrets.GITHUB_TOKEN }} 

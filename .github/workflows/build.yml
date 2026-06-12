@@ -123,14 +123,14 @@ jobs:
                   path: gradnux.tar
             - name: login to ghcr
               uses: docker/login-action@v4
-              if: github.event_name == "push" && github.actor == github.repository_owner
+              if: github.event_name == 'push' && github.actor == github.repository_owner
               with:
                   registry: ghcr.io
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
             - name: push to ghcr
               uses: redhat-actions/push-to-registry@v2
-              if: github.event_name == "push" && github.actor == github.repository_owner
+              if: github.event_name == 'push' && github.actor == github.repository_owner
               with:
                   registry: "ghcr.io/${{ github.actor }}"
                   image: "${{ github.event.repository.name }}"

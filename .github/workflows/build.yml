@@ -118,7 +118,7 @@ jobs:
                   sudo podman exec container tcc -v
                   sudo podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge"
                   sudo podman commit container gradnux:latest
-                  sudo podman save -o gradnux.tar gradnux:latest
+                  sudo podman save -o gradnux.tar ${{ github.event.repository.name }}:latest
             - name: upload state
               uses: actions/upload-artifact@v4
               with:
@@ -135,7 +135,7 @@ jobs:
               uses: redhat-actions/push-to-registry@v2
               if: github.event_name == 'push' && contains(fromJSON(env.PUSHERS), github.actor)
               with:
-                  registry: "ghcr.io/${{ github.actor }}"
+                  registry: "ghcr.io/${{ github.repository_owner }}"
                   image: "${{ github.event.repository.name }}"
                   tags: latest
                   username: ${{ github.actor }}

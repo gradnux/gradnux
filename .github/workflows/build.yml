@@ -48,7 +48,6 @@ jobs:
                   git submodule init
                   git submodule update --init --depth 1 kernel
                   git submodule update --init --recursive
-                  mv scavenge rootfs/tmp/scavenge
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -65,7 +64,7 @@ jobs:
                   # mmh, sudo
                   cd ..
                   cp -r ~/musl/. rootfs/usr
-                  rm rootfs/usr/bin/musl-gcc || true
+                  rm rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
                   echo "$HOME/musl/bin" >> $GITHUB_PATH
                   echo "$LD_LIBRARY_PATH"
                   echo "LD_LIBRARY_PATH=$HOME/musl/lib" >> $GITHUB_ENV
@@ -125,8 +124,8 @@ jobs:
             - name: upload state
               uses: actions/upload-artifact@v4
               with:
-                  name: gradnuxImg
-                  path: gradnux.tar
+                  name: img
+                  path: "${{ github.event.repository.name }}.tar"
             - name: login to ghcr
               uses: docker/login-action@v4
               if: github.event_name == 'push' && contains(fromJSON(env.PUSHERS), github.actor)

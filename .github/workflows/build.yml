@@ -53,7 +53,7 @@ jobs:
                   ccache --max-size 10G
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
-                  # let's not waste microsoft's resources (for now... haha...)
+                  # let's not waste microsoft's resources (for now... heh heh...)
             - name: build musl
               run: |
                   cd musl

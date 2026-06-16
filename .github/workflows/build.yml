@@ -38,7 +38,7 @@ jobs:
                   cd rootfs
                   mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp,bin}
                   cd ..
-                  mkdir -p busybox
+                  mkdir -p busybox ~/bb
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   git config --global --add safe.directory '*'
@@ -53,18 +53,18 @@ jobs:
                   # let's not waste microsoft's resources (for now... heh heh...)
             - name: obtain musl
               run: |
-                  cp -r ~/musl/. rootfs/usr
+                  cp -r /musl/. rootfs/usr
                   rm rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
             - name: build tcc
               run: |
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=$HOME/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r ~/musl/include /usr/include
                   # gaslight tcc into believing musl is here
-                  make CC="musl-gcc" CFLAGS="-static --sysroot=$HOME/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
+                  make CC="musl-gcc" CFLAGS="-static --sysroot=/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately
@@ -78,7 +78,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  MUSLCC="musl-gcc -static --sysroot=$HOME/musl"
+                  MUSLCC="musl-gcc -static --sysroot=/musl"
                   CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/

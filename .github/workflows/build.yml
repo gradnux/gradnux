@@ -116,7 +116,7 @@ jobs:
                   done
                   cd ..
                   podman build -t gradnuxbase:latest .
-                  podman run -dit --name container gradnuxbase:latest
+                  script -q -e -c "podman run -dit --name container gradnuxbase:latest" /dev/null
                   podman exec container tcc -v
                   podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge"
                   podman commit container gradnux:latest

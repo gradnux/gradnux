@@ -10,7 +10,7 @@ RUN env
 # RUN echo "int main() {while(1){}return 0;}" > /sbin/init.c
 # RUN tcc /sbin/init.c -o /sbin/init
 
-RUN ln -sT ../bin /sbin
+RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 
 # RUN aria2c --verbose

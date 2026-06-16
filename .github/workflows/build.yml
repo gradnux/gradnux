@@ -17,16 +17,14 @@ jobs:
     build:
         name: build everything
         runs-on: ubuntu-latest
+        container: ghcr.io/gradnux/builder:latest
         steps:
             - name: check out
               uses: actions/checkout@v4
-            - name: install prerequisites
-              run: |
-                  sudo apt update -y
-                  # host helpers
-                  sudo apt install -y build-essential gcc aria2 texinfo perl
-                  # kernel
-                  sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+            # - name: install prerequisites
+            #   run: |
+            #       # kernel
+            #       sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -40,9 +38,7 @@ jobs:
                   cd rootfs
                   mkdir -p {dev,etc,lib,lib64,proc,sbin,sys,usr,tmp,bin}
                   cd ..
-                  mkdir -p {musl,busybox} ~/musl/
-                  aria2c -j 16 -x 16 -s 16 "https://musl.libc.org/releases/musl-1.2.6.tar.gz" -o musl.tar.gz
-                  tar -xf musl.tar.gz -C musl --strip-components=1
+                  mkdir -p busybox
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   git submodule init
@@ -54,21 +50,10 @@ jobs:
                   # CC="ccache gcc" HOSTCC="ccache gcc" ./buildKernel
                   # not now apparently
                   # let's not waste microsoft's resources (for now... heh heh...)
-            - name: build musl
+            - name: obtain musl
               run: |
-                  cd musl
-                  CC=gcc AR=ar RANLIB=ranlib ./configure --prefix="$HOME"/musl/ --target=x86_64-linux-musl –enable-optimize=size
-                  # "started with gcc 4.8.1, the memset code will be miscompiled. This can be worked around by adding -fno-tree-loop-distribute-patterns to the CFLAGS or passing –enable-optimize=size to configure."
-                  make -j$(nproc)
-                  sudo make install
-                  # mmh, sudo
-                  cd ..
                   cp -r ~/musl/. rootfs/usr
                   rm rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
-                  echo "$HOME/musl/bin" >> $GITHUB_PATH
-                  echo "$LD_LIBRARY_PATH"
-                  echo "LD_LIBRARY_PATH=$HOME/musl/lib" >> $GITHUB_ENV
-                  echo "CC=$HOME/musl/bin/musl-gcc" >> $GITHUB_ENV
             - name: build tcc
               run: |
                   cd tcc
@@ -115,11 +100,7 @@ jobs:
                       ln -sT ../../"$a" usr/"$a"
                   done
                   cd ..
-                  podman build -t gradnuxbase:latest .
-                  script -q -e -c "podman run -dit --name container gradnuxbase:latest" /dev/null
-                  podman exec container tcc -v
-                  podman exec container sh -c "cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge"
-                  podman commit container gradnux:latest
+                  podman build -t gradnux:latest .
                   podman save -o gradnux.tar ${{ github.event.repository.name }}:latest
             - name: upload state
               uses: actions/upload-artifact@v4
@@ -141,4 +122,4 @@ jobs:
                   image: "${{ github.event.repository.name }}"
                   tags: latest
                   username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }} 
+                  password: ${{ secrets.GITHUB_TOKEN }}

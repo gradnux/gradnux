@@ -28,12 +28,12 @@ my favorite is the first one though, so i guess i'll use that as the main motto
 - [x] busybox
 - [x] tcc
 - [x] scavenge
-- [ ] aria2c
-- [ ] bootc?
+- [ ] aria2c ←
 - [ ] (gnu) bash
+- [ ] bootc?
 - [ ] x11
 - [ ] fluxbox fork (grad fluxbox)
-- [ ] gtk3
+- [ ] gtk3?
 - [ ] atleast firefox
 
 ## build

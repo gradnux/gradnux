@@ -21,10 +21,10 @@ jobs:
         steps:
             - name: check out
               uses: actions/checkout@v4
-            # - name: install prerequisites
-            #   run: |
-            #       # kernel
-            #       sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+            - name: install prerequisites
+              run: |
+                  # kernel
+                  sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
             - name: setup ccache
               uses: actions/cache@v4
               with:

@@ -45,6 +45,7 @@ jobs:
                   git submodule init
                   git submodule update --init --depth 1 kernel
                   git submodule update --init --recursive
+                  tree rootfs
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -87,7 +88,6 @@ jobs:
                   # "You will probably need to make your busybox binary setuid root to ensure all configured applets will work properly."
                   sudo chown root ~/bb/bin/busybox
                   sudo chmod 4755 ~/bb/bin/busybox
-                  tree rootfs
                   cp -a ~/bb/bin/busybox rootfs/bin/
                   for a in $(find ~/bb -type l -printf "%f " | sed "s/ *$//"); do
                       ln -sT busybox "rootfs/bin/$a"

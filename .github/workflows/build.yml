@@ -41,6 +41,7 @@ jobs:
                   mkdir -p busybox
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
+                  git config --global --add safe.directory '*'
                   git submodule init
                   git submodule update --init --depth 1 kernel
                   git submodule update --init --recursive

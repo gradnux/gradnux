@@ -29,9 +29,8 @@ my favorite is the first one though, so i guess i'll use that as the main motto
 - [x] tcc
 - [x] scavenge
 - [ ] aria2c
-- [ ] (gnu) bash
-- [ ] systemd?
 - [ ] bootc?
+- [ ] (gnu) bash
 - [ ] x11
 - [ ] fluxbox fork (grad fluxbox)
 - [ ] gtk3

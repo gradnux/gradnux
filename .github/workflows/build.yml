@@ -40,7 +40,7 @@ jobs:
             - name: setup
               run: |
                   cd rootfs
-                  mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin
+                  mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin lib/tcc
                   cd ..
                   mkdir -p busybox ~/bb
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2

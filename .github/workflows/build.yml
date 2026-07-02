@@ -69,7 +69,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/ld-musl-x86_64.1.so" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/ld-musl-x86_64.so.1" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
                   # gaslight tcc into believing musl is here
@@ -80,9 +80,7 @@ jobs:
                   ls -la ../rootfs
                   ls -la ../rootfs/bin
                   chmod +x ./tcc
-                  mv ./tcc ../rootfs/bin/
-                  mv ./libtcc1.a ../rootfs/lib/tcc/
-                  cp -rf include/. ../rootfs/usr/include/
+                  make install DESTDIR=rootfs
                   ls /musl/lib/ld-musl*
                   cd ..
             - name: build busybox

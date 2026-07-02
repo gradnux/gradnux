@@ -49,8 +49,8 @@ jobs:
                   git submodule init
                   git submodule update --init --depth 1 kernel
                   git submodule update --init --recursive
-                  sudo apt install -y tree
-                  tree rootfs
+                  # sudo apt install -y tree
+                  # tree rootfs
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G

@@ -21,10 +21,14 @@ jobs:
         steps:
             - name: check out
               uses: actions/checkout@v4
+              with:
+                  lfs: true
             - name: install prerequisites
               run: |
                   # kernel
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
+                  # aria2c
+                  # sudo apt install -y libxml2-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev libssl3
             - name: setup ccache
               uses: actions/cache@v4
               with:
@@ -57,6 +61,10 @@ jobs:
               run: |
                   cp -r /musl/. rootfs/usr
                   rm rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
+            - name: obtain rust
+              run: |
+                  mkdir -p rootfs/tmp/rust
+                  tar -xf rust.tar.bz2 -C rootfs/tmp/rust --strip-components=1
             - name: build tcc
               run: |
                   cd tcc

@@ -104,7 +104,7 @@ jobs:
             - name: build final image?
               run: |
                   chmod 1777 rootfs/tmp
-                  tree rootfs
+                  tree rootfs -I "tmp"
                   docker build -t "${{ github.event.repository.name }}:latest" -f Containerfile .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"
             - name: upload state

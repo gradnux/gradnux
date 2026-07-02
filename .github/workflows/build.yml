@@ -83,6 +83,7 @@ jobs:
                   mv ./tcc ../rootfs/bin/
                   mv ./libtcc1.a ../rootfs/lib/tcc/
                   cp -rf include/. ../rootfs/usr/include/
+                  ls /lib/ld-musl*
                   cd ..
             - name: build busybox
               run: |

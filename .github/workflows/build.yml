@@ -78,6 +78,8 @@ jobs:
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately
+                  ls -la ../rootfs
+                  ls -la ../rootfs/bin
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/bin/
                   mv ./libtcc1.a ../rootfs/lib/
@@ -103,14 +105,7 @@ jobs:
                   done
             - name: build final image?
               run: |
-                  cd rootfs
-                  chmod 1777 tmp
-                  for a in {bin,lib}; do
-                      cp -r usr/"$a"/. "$a"
-                      rm -rf usr/"$a"
-                      ln -sT ../../"$a" usr/"$a"
-                  done
-                  cd ..
+                  chmod 1777 rootfs/tmp
                   podman build -t gradnux:latest .
                   podman save -o gradnux.tar ${{ github.event.repository.name }}:latest
             - name: upload state

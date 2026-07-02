@@ -106,6 +106,7 @@ jobs:
             - name: build final image?
               run: |
                   chmod 1777 rootfs/tmp
+                  sudo apt install -y docker
                   docker build -t "${{ github.event.repository.name }}:latest" .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"
             - name: upload state

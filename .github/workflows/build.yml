@@ -59,7 +59,7 @@ jobs:
               run: |
                   cp -r /musl/. rootfs/usr
                   cp -r rootfs/usr/lib/. rootfs/lib
-                  rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib || true
+                  rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib rootfs/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
                   mkdir -p rootfs/tmp/rust rootfs/usr/local
@@ -81,7 +81,7 @@ jobs:
                   ls -la ../rootfs/bin
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/bin/
-                  mv ./libtcc1.a ../rootfs/lib/
+                  mv ./libtcc1.a ../rootfs/lib/tcc/
                   cp -rf include/. ../rootfs/usr/include/
                   cd ..
             - name: build busybox

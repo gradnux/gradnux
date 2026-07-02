@@ -49,8 +49,6 @@ jobs:
                   git submodule init
                   git submodule update --init --depth 1 kernel
                   git submodule update --init --recursive
-                  # sudo apt install -y tree
-                  # tree rootfs
             - name: build kernel (stub)
               run: |
                   ccache --max-size 10G
@@ -106,7 +104,7 @@ jobs:
             - name: build final image?
               run: |
                   chmod 1777 rootfs/tmp
-                  sudo apt install -y docker.io
+                  tree rootfs
                   docker build -t "${{ github.event.repository.name }}:latest" -f Containerfile .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"
             - name: upload state

@@ -58,7 +58,6 @@ jobs:
             - name: obtain musl
               run: |
                   cp -r /musl/. rootfs/usr
-                  cp -r rootfs/usr/lib/. rootfs/lib
                   rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib rootfs/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |

@@ -77,13 +77,10 @@ jobs:
                   sudo rm -rf /usr/include
                   sudo mv "$HOME"/glibcWompWomp /usr/include
                   # glibc needs to get back here, unfortunately
-                  ls -la ../rootfs
-                  ls -la ../rootfs/bin
                   chmod +x ./tcc
-                  mv ./tcc ../rootfs/usr/bin/
-                  mv ./libtcc1.a ../rootfs/usr/lib/
+                  mv ./tcc ../rootfs/bin/
+                  mv ./libtcc1.a ../rootfs/lib/
                   cp -rf include/. ../rootfs/usr/include/
-                  ls /musl/lib/ld-musl*
                   cd ..
             - name: build busybox
               run: |

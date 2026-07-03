@@ -12,6 +12,7 @@ permissions:
 
 env:
     PUSHERS: '["RixInGithub"]'
+    REG: "ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}"
 
 jobs:
     build:
@@ -58,7 +59,7 @@ jobs:
             - name: obtain musl
               run: |
                   cp -r /musl/. rootfs/usr
-                  rm -rf rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
+                  rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
                   mkdir -p rootfs/tmp/rust rootfs/usr/local
@@ -78,7 +79,7 @@ jobs:
                   # glibc needs to get back here, unfortunately
                   chmod +x ./tcc
                   mv ./tcc ../rootfs/bin/
-                  mv ./libtcc1.a ../rootfs/lib/
+                  mv ./libtcc1.a ../rootfs/lib/tcc/
                   cp -rf include/. ../rootfs/usr/include/
                   cd ..
             - name: build busybox
@@ -125,11 +126,7 @@ jobs:
                   username: ${{ github.actor }}
                   password: ${{ secrets.GITHUB_TOKEN }}
             - name: push to ghcr
-              uses: redhat-actions/push-to-registry@v2
               if: github.event_name == 'push' && contains(fromJSON(env.PUSHERS), github.actor)
-              with:
-                  registry: "ghcr.io/${{ github.repository_owner }}"
-                  image: "${{ github.event.repository.name }}"
-                  tags: latest
-                  username: ${{ github.actor }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  docker tag gradnux:latest "$REG:latest"
+                  docker push "$REG:latest"

@@ -69,7 +69,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libdir="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no --config-musl
+                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libpaths="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --enable-static --config-bcheck=no --config-musl --triplet="x86_64-linux-musl"
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
                   # gaslight tcc into believing musl is here

@@ -58,7 +58,7 @@ jobs:
             - name: obtain musl
               run: |
                   cp -r /musl/. rootfs/usr
-                  rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib rootfs/lib/musl-gcc.specs || true
+                  rm -rf rootfs/usr/bin/musl-gcc rootfs/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
                   mkdir -p rootfs/tmp/rust rootfs/usr/local
@@ -101,6 +101,7 @@ jobs:
                   done
             - name: build final image?
               run: |
+                  tree rootfs -I "tmp"
                   cd rootfs
                   chmod 1777 tmp
                   for a in bin lib; do
@@ -109,7 +110,6 @@ jobs:
                       ln -sT ../../"$a" usr/"$a"
                   done
                   cd ..
-                  tree rootfs -I "tmp"
                   docker build -t "${{ github.event.repository.name }}:latest" -f Containerfile .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"
             - name: upload state

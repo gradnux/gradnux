@@ -63,7 +63,7 @@ jobs:
             - name: obtain rust
               run: |
                   mkdir -p rootfs/tmp/rust rootfs/usr/local
-                  # tar -xf rust.tar.gz -C rootfs/tmp/rust --strip-components=1
+                  tar -xf rust.tar.gz -C rootfs/tmp/rust --strip-components=1
             - name: build tcc
               run: |
                   cd tcc

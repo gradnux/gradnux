@@ -1,0 +1,14 @@
+#!/usr/bin/false
+# this file demonstrates the steps i used to obtain and modify the libgcc to make it work
+
+aria2c -j 16 -x 16 -s 16 "https://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64/libgcc-15.2.0-r6.apk" -o libgcc.apk
+
+# ... cd into libgcc_s.so.1 ...
+
+patchelf --replace-needed libc.musl-x86_64.so.1 libc.so libgcc_s.so.1
+# yay!
+
+# sorry alpine linux maintainers for grabbing your libgcc
+# i had no other option
+# now if you will excuse me
+# i got a bootc to make work

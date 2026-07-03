@@ -62,8 +62,13 @@ jobs:
                   rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
-                  mkdir -p rootfs/tmp/rust rootfs/usr/local
-                  tar -xf rust.tar.gz -C rootfs/tmp/rust --strip-components=1
+                  mkdir -p ~/tmp/rust rootfs/usr/local
+                  tar -xf rust.tar.gz -C rust --strip-components=1
+                  cd rust
+                  ./install.sh --destdir="$(realpath ../rootfs)"
+                  cd ..
+                  rm -rf rust
+                  # fuck you rust
             - name: build tcc
               run: |
                   cd tcc

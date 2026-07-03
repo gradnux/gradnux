@@ -16,8 +16,6 @@ RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 RUN tcc -vv
 RUN cd /tmp/scavenge && ./build.sh && cp scavenge /bin/ && cd .. && rm -rf scavenge
 
-RUN cd /tmp/rust && ./install.sh && cd .. && rm -rf rust
-
 # RUN aria2c --verbose
 # RUN aria2c -j 16 -x 16 -s 16 "https://http.cat/200.jpg" -o okay.jpg
 # RUN hexdump -Cn32 okay.jpg

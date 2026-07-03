@@ -105,7 +105,7 @@ jobs:
                   tree rootfs -I "tmp"
                   cd rootfs
                   chmod 1777 tmp
-                  for a in bin lib; do
+                  for a in bin; do
                       cp -r usr/"$a"/. "$a"
                       rm -rf usr/"$a"
                       ln -sT ../../"$a" usr/"$a"

@@ -21,7 +21,7 @@ jobs:
         container: ghcr.io/gradnux/builder:latest
         steps:
             - name: check out
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
               with:
                   lfs: true
             - name: install prerequisites
@@ -31,7 +31,7 @@ jobs:
                   # aria2c
                   # sudo apt install -y libxml2-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev libssl3
             - name: setup ccache
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: |
                       kernel
@@ -69,7 +69,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libdir="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
                   # gaslight tcc into believing musl is here
@@ -114,7 +114,7 @@ jobs:
                   docker build -t "${{ github.event.repository.name }}:latest" -f Containerfile .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"
             - name: upload state
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v5
               with:
                   name: img
                   path: "${{ github.event.repository.name }}.tar"

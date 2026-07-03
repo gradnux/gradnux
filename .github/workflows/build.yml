@@ -18,7 +18,6 @@ jobs:
         name: build everything
         runs-on: ubuntu-latest
         container: ghcr.io/gradnux/builder:latest
-        shell: bash
         steps:
             - name: check out
               uses: actions/checkout@v4

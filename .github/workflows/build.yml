@@ -65,7 +65,7 @@ jobs:
                   mkdir -p rust rootfs/usr/local
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   cd rust
-                  ./install.sh --destdir="$(realpath ../rootfs)"
+                  ./install.sh --destdir="$(realpath ../rootfs)" --without=rust-docs,rust-docs-json-preview,rust-analyzer-preview
                   cd ..
                   rm -rf rust
                   # fuck you rust
@@ -107,7 +107,7 @@ jobs:
                   done
             - name: build final image?
               run: |
-                  tree rootfs -I "tmp"
+                  tree rootfs -I "tmp|usr/local"
                   cd rootfs
                   chmod 1777 tmp
                   for a in bin lib; do

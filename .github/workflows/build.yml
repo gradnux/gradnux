@@ -62,7 +62,7 @@ jobs:
                   rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
-                  mkdir -p ~/tmp/rust rootfs/usr/local
+                  mkdir -p rust rootfs/usr/local
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   cd rust
                   ./install.sh --destdir="$(realpath ../rootfs)"

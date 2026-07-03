@@ -69,7 +69,7 @@ jobs:
                   cd tcc
                   rm lib/bcheck.c
                   touch lib/bcheck.c
-                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/ld-musl-x86_64.so.1" --enable-static --config-bcheck=no
+                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --sysincludepaths="/usr/include" --crtprefix="/lib" --elfinterp="/lib/libc.so" --enable-static --config-bcheck=no
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
                   # gaslight tcc into believing musl is here
@@ -80,7 +80,9 @@ jobs:
                   ls -la ../rootfs
                   ls -la ../rootfs/bin
                   chmod +x ./tcc
-                  make install DESTDIR=rootfs
+                  mv ./tcc ../rootfs/usr/bin/
+                  mv ./libtcc1.a ../rootfs/usr/lib/
+                  cp -rf include/. ../rootfs/usr/include/
                   ls /musl/lib/ld-musl*
                   cd ..
             - name: build busybox
@@ -103,7 +105,14 @@ jobs:
                   done
             - name: build final image?
               run: |
-                  chmod 1777 rootfs/tmp
+                  cd rootfs
+                  chmod 1777 tmp
+                  for a in {bin,lib}; do
+                      cp -r usr/"$a"/. "$a"
+                      rm -rf usr/"$a"
+                      ln -sT ../../"$a" usr/"$a"
+                  done
+                  cd ..
                   tree rootfs -I "tmp"
                   docker build -t "${{ github.event.repository.name }}:latest" -f Containerfile .
                   docker save -o gradnux.tar "${{ github.event.repository.name }}:latest"

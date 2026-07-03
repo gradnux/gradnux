@@ -13,8 +13,8 @@ RUN env
 RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 
-RUN tcc -v
-RUN cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge
+# RUN tcc -v
+# RUN cd /tmp/scavenge && ./build.sh && cp ./scavenge /bin/ && cd / && rm -rf /tmp/scavenge
 
 # RUN aria2c --verbose
 # RUN aria2c -j 16 -x 16 -s 16 "https://http.cat/200.jpg" -o okay.jpg

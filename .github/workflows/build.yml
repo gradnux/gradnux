@@ -18,6 +18,7 @@ jobs:
         name: build everything
         runs-on: ubuntu-latest
         container: ghcr.io/gradnux/builder:latest
+        shell: bash
         steps:
             - name: check out
               uses: actions/checkout@v4
@@ -104,7 +105,7 @@ jobs:
               run: |
                   cd rootfs
                   chmod 1777 tmp
-                  for a in {bin,lib}; do
+                  for a in bin lib; do
                       cp -r usr/"$a"/. "$a"
                       rm -rf usr/"$a"
                       ln -sT ../../"$a" usr/"$a"

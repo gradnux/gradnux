@@ -73,10 +73,10 @@ jobs:
             - name: build gcc?
               run: |
                   cd gcc/source
-                  MUSLCC="musl-g++ -static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
+                  CFLAGS="-static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
                   contrib/download_prerequisites --no-verify
                   cd ../build
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" ../source/configure --build=x86_64-linux-musl --disable-multilib
+                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --build=x86_64-linux-musl --disable-multilib
                   okay="yeah"
                   CC="$MUSLCC" CXX="$MUSLCC" make -j$(nproc) || okay="nope"
                   if [ "$okay" = "nope" ]; then

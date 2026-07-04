@@ -13,6 +13,13 @@ RUN env
 RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 
+RUN cd /tmp && mkdir -p make && tar -xf make.tar.gz -C make --strip-components 1 && cd make && CC=tcc ./configure && ./build.sh && ./make install && cd .. && rm -rf make make.tar.gz
+
+RUN cd /tmp && mkdir -p gcc && tar -xf gcc.tar.gz -C gcc --strip-components 1 && cd gcc && contrib/download_prerequisites --no-verify && CC=tcc ./configure --disable-multilib && make all install && cd .. && rm -rf gcc gcc.tar.gz && \
+	rm -rf /bin/tcc /lib/tcc
+
+# tcc headers might be useful, so idk
+
 RUN tcc -vv
 RUN cd /tmp/scavenge && ./build.sh && cp scavenge /bin/ && cd .. && rm -rf scavenge
 

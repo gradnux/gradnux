@@ -70,6 +70,26 @@ jobs:
                   cd ..
                   rm -rf rust
                   # fuck you rust
+            - name: build gcc?
+              run: |
+                  cd gcc/source
+                  MUSLCC="musl-gcc -static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
+                  contrib/download_prerequisites --no-verify
+                  cd ../build
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" ../source/configure --build=x86_64-linux-musl --disable-multilib
+                  okay="yeah"
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc) || okay="nope"
+                  if [ "$okay" = "nope" ]; then
+                      echo "--- well we're fucked ---"
+                      cat config.log
+                      exit 1
+                      false
+                  fi
+                  make install DESTDIR="$(realpath ../rootfs)"
+                  cd ../..
+                  echo "okay"
+                  exit 1
+                  false
             # - name: build tcc
             #   run: |
             #       cd tcc
@@ -114,22 +134,6 @@ jobs:
                   CC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..
-            - name: build gcc?
-              run: |
-                  cd gcc/source
-                  MUSLCC="musl-gcc -static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
-                  contrib/download_prerequisites --no-verify
-                  cd ../build
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" ../source/configure --build=x86_64-linux-musl --disable-multilib
-                  okay="yeah"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc) || okay="nope"
-                  if [ "$okay" = "nope" ]; then
-                      cat config.log
-                      exit 1
-                      false
-                  end
-                  make install DESTDIR="$(realpath ../rootfs)"
-                  cd ../..
             - name: build final image?
               run: |
                   tree rootfs -I "tmp|usr/local"

@@ -13,11 +13,6 @@ RUN env
 RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 
-RUN cd /tmp && mkdir -p gcc && tar -xf gcc.tar.gz -C gcc --strip-components=1 && cd gcc && contrib/download_prerequisites --no-verify && CC=tcc ./configure --disable-multilib --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl && make all install && cd .. && rm -rf gcc gcc.tar.gz && \
-	rm -rf /bin/tcc /lib/tcc
-
-# tcc headers might be useful, so idk
-
 RUN cd /tmp/scavenge && ./build.sh && cp scavenge /bin/ && cd .. && rm -rf scavenge
 
 # RUN aria2c --verbose

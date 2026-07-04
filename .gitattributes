@@ -1,2 +1,2 @@
 rust.tar.gz filter=lfs diff=lfs merge=lfs -text
-rootfs/tmp/gcc.tar.gz filter=lfs diff=lfs merge=lfs -text
+gcc.tar.gz filter=lfs diff=lfs merge=lfs -text

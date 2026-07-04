@@ -41,12 +41,14 @@ jobs:
             - name: setup
               run: |
                   cd rootfs
-                  mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin lib/tcc
+                  mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin lib/tcc usr/local
                   cd ..
-                  mkdir -p busybox ~/bb make
+                  mkdir -p busybox ~/bb make gcc rust
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
+                  tar -xf rust.tar.gz -C rust --strip-components=1
                   tar -xf make.tar.gz -C make --strip-components=1
+                  tar -xf gcc.tar.gz -C gcc --strip-components=1
                   git config --global --add safe.directory '*'
                   git submodule init
                   git submodule update --init --depth 1 kernel
@@ -63,31 +65,29 @@ jobs:
                   rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib/musl-gcc.specs || true
             - name: obtain rust
               run: |
-                  mkdir -p rust rootfs/usr/local
-                  tar -xf rust.tar.gz -C rust --strip-components=1
                   cd rust
                   ./install.sh --destdir="$(realpath ../rootfs)" --without=rust-docs,rust-docs-json-preview,rust-analyzer-preview
                   cd ..
                   rm -rf rust
                   # fuck you rust
-            - name: build tcc
-              run: |
-                  cd tcc
-                  rm lib/bcheck.c
-                  touch lib/bcheck.c
-                  CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libpaths="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --enable-static --config-bcheck=no --config-musl --triplet="x86_64-linux-musl"
-                  sudo mv /usr/include "$HOME"/glibcWompWomp
-                  sudo cp -r /musl/include /usr/include
-                  # gaslight tcc into believing musl is here
-                  make CC="musl-gcc" CFLAGS="-static --sysroot=/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
-                  sudo rm -rf /usr/include
-                  sudo mv "$HOME"/glibcWompWomp /usr/include
-                  # glibc needs to get back here, unfortunately
-                  chmod +x ./tcc
-                  mv ./tcc ../rootfs/bin/
-                  mv ./libtcc1.a ../rootfs/lib/tcc/
-                  cp -rf include/. ../rootfs/usr/include/
-                  cd ..
+            # - name: build tcc
+            #   run: |
+            #       cd tcc
+            #       rm lib/bcheck.c
+            #       touch lib/bcheck.c
+            #       CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libpaths="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --enable-static --config-bcheck=no --config-musl --triplet="x86_64-linux-musl"
+            #       sudo mv /usr/include "$HOME"/glibcWompWomp
+            #       sudo cp -r /musl/include /usr/include
+            #       # gaslight tcc into believing musl is here
+            #       make CC="musl-gcc" CFLAGS="-static --sysroot=/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
+            #       sudo rm -rf /usr/include
+            #       sudo mv "$HOME"/glibcWompWomp /usr/include
+            #       # glibc needs to get back here, unfortunately
+            #       chmod +x ./tcc
+            #       mv ./tcc ../rootfs/bin/
+            #       mv ./libtcc1.a ../rootfs/lib/tcc/
+            #       cp -rf include/. ../rootfs/usr/include/
+            #       cd ..
             - name: build busybox
               run: |
                   ./setupBb
@@ -111,6 +111,15 @@ jobs:
                   cd make
                   MUSLCC="musl-gcc -static --sysroot=/musl"
                   CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-dependency-tracking
+                  CC="$MUSLCC" make -j$(nproc)
+                  make install DESTDIR="$(realpath ../rootfs)"
+                  cd ..
+            - name: build gcc?
+              run: |
+                  cd gcc
+                  MUSLCC="musl-gcc -static --sysroot=/musl"
+                  contrib/download_prerequisites --no-verify
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-multilib
                   CC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..

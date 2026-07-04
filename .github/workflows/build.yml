@@ -79,7 +79,7 @@ jobs:
                   cd ../build
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
-                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --build=x86_64-linux-musl --disable-multilib
+                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --host --build=x86_64-linux-musl --disable-multilib
                   okay="yeah"
                   CC="$MUSLCC" CXX="$MUSLCC" make -j$(nproc) || okay="nope"
                   sudo rm -rf /usr/include
@@ -87,7 +87,7 @@ jobs:
                   # glibc needs to get back here, unfortunately
                   if [ "$okay" = "nope" ]; then
                       echo "--- well we're fucked ---"
-                      cat config.log
+                      cat libcody/config.log
                       exit 1
                       false
                   fi

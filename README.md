@@ -26,12 +26,12 @@ my favorite is the first one though, so i guess i'll use that as the main motto
 - [x] kernel
 - [x] musl
 - [x] busybox
-- [x] tcc
-- [x] scavenge
+- [ ] gcc ←
+- [ ] scavenge
 - [ ] aria2c
 - [ ] (gnu) bash
 - [x] rust
-- [ ] bootc? ←
+- [ ] bootc?
 - [ ] x11
 - [ ] fluxbox fork (grad fluxbox)
 - [ ] gtk3?

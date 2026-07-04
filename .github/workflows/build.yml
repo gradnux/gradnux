@@ -78,7 +78,7 @@ jobs:
                   cd ../build
                   CC="$MUSLCC" HOSTCC="$MUSLCC" ../source/configure --build=x86_64-linux-musl --disable-multilib
                   okay="yeah"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc) || okay="nope"
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" CC="musl-g++" make -j$(nproc) || okay="nope"
                   if [ "$okay" = "nope" ]; then
                       echo "--- well we're fucked ---"
                       cat config.log

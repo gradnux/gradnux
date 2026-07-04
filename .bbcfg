@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.38.0
-# Wed Jul  1 22:21:31 2026
+# Sat Jul  4 12:56:44 2026
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -350,8 +350,8 @@ CONFIG_TRUE=y
 CONFIG_TRUNCATE=y
 CONFIG_TSORT=y
 CONFIG_TTY=y
-# CONFIG_UNAME is not set
-CONFIG_UNAME_OSNAME=""
+CONFIG_UNAME=y
+CONFIG_UNAME_OSNAME="GNU/Linux"
 CONFIG_BB_ARCH=y
 CONFIG_UNIQ=y
 CONFIG_UNLINK=y

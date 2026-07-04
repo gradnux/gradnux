@@ -13,7 +13,7 @@ RUN env
 RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 
-RUN cd /tmp && mkdir -p make && tar -xf make.tar.gz -C make --strip-components 1 && cd make && CC=tcc ./configure && ./build.sh && ./make install && cd .. && rm -rf make make.tar.gz
+RUN cd /tmp && mkdir -p make && tar -xf make.tar.gz -C make --strip-components 1 && cd make && CC=tcc ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl && ./build.sh && ./make install && cd .. && rm -rf make make.tar.gz
 
 RUN cd /tmp && mkdir -p gcc && tar -xf gcc.tar.gz -C gcc --strip-components 1 && cd gcc && contrib/download_prerequisites --no-verify && CC=tcc ./configure --disable-multilib && make all install && cd .. && rm -rf gcc gcc.tar.gz && \
 	rm -rf /bin/tcc /lib/tcc

@@ -79,7 +79,7 @@ jobs:
                   cd ../build
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
-                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --host --build=x86_64-linux-musl --disable-multilib
+                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --host=x86_64-linux-gnu --build=x86_64-linux-musl --disable-multilib
                   okay="yeah"
                   CC="$MUSLCC" CXX="$MUSLCC" make -j$(nproc) || okay="nope"
                   sudo rm -rf /usr/include

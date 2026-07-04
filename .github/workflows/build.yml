@@ -43,12 +43,12 @@ jobs:
                   cd rootfs
                   mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin lib/tcc usr/local
                   cd ..
-                  mkdir -p busybox ~/bb make gcc rust
+                  mkdir -p busybox ~/bb make gcc/source gcc/build rust
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   tar -xf make.tar.gz -C make --strip-components=1
-                  tar -xf gcc.tar.gz -C gcc --strip-components=1
+                  tar -xf gcc.tar.gz -C gcc/source --strip-components=1
                   git config --global --add safe.directory '*'
                   git submodule init
                   git submodule update --init --depth 1 kernel
@@ -110,19 +110,26 @@ jobs:
               run: |
                   cd make
                   MUSLCC="musl-gcc -static --sysroot=/musl"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-dependency-tracking
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-linux-musl --build=x86_64-linux-musl --disable-dependency-tracking
                   CC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..
             - name: build gcc?
               run: |
-                  cd gcc
-                  contrib/download_prerequisites --no-verify
+                  cd gcc/source
                   MUSLCC="musl-gcc -static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-multilib
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc)
+                  contrib/download_prerequisites --no-verify
+                  cd ../build
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" ../source/configure --build=x86_64-linux-musl --disable-multilib
+                  okay="yeah"
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc) || okay="nope"
+                  if [ "$okay" = "nope" ]; then
+                      cat config.log
+                      exit 1
+                      false
+                  end
                   make install DESTDIR="$(realpath ../rootfs)"
-                  cd ..
+                  cd ../..
             - name: build final image?
               run: |
                   tree rootfs -I "tmp|usr/local"

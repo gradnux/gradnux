@@ -118,8 +118,9 @@ jobs:
               run: |
                   cd gcc
                   contrib/download_prerequisites --no-verify
-                  CC="musl-gcc" HOSTCC="musl-gcc" CFLAGS="-static --sysroot=/musl -DHAVE_DECL_BASENAME=1" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-multilib
-                  CC="musl-gcc" HOSTCC="musl-gcc" CFLAGS="-static --sysroot=/musl -DHAVE_DECL_BASENAME=1" make -j$(nproc)
+                  MUSLCC="musl-gcc -static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-unknown-linux-musl --build=x86_64-unknown-linux-musl --disable-multilib
+                  CC="$MUSLCC" HOSTCC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..
             - name: build final image?

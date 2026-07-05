@@ -73,7 +73,7 @@ jobs:
                   cd busybox
                   make oldconfig
                   MUSLCC="/musl/gcc -static --sysroot=/musl"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
+                  CC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/
                   cp docs/busybox.1 ../rootfs/usr/share/man/man1/busybox.1
@@ -89,7 +89,7 @@ jobs:
               run: |
                   cd make
                   MUSLCC="/musl/gcc -static"
-                  CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-linux-musl --build=x86_64-linux-musl --disable-dependency-tracking
+                  CC="$MUSLCC" ./configure --host=x86_64-linux-gnu --build=x86_64-linux-musl --disable-dependency-tracking
                   CC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..

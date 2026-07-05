@@ -7,9 +7,6 @@ ENV LANG=en_US.UTF8 LC_ALL=en_US.UTF8
 
 RUN env
 
-# RUN echo "int main() {while(1){}return 0;}" > /sbin/init.c
-# RUN tcc /sbin/init.c -o /sbin/init
-
 RUN cp -r sbin/. bin && rm -rf sbin && ln -sT ../bin /sbin
 # for /sbin/init
 

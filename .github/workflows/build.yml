@@ -49,7 +49,6 @@ jobs:
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   tar -xf make.tar.gz -C make --strip-components=1
-                  tar -xf gcc.tar.gz -C gcc/source --strip-components=1
                   git config --global --add safe.directory '*'
                   git submodule init
                   git submodule update --init --depth 1 kernel
@@ -61,59 +60,14 @@ jobs:
                   # not now apparently
                   # let's not waste microsoft's resources (for now... heh heh...)
             - name: obtain musl
-              run: |
-                  cp -r /musl/. rootfs/usr
-                  rm -rf rootfs/usr/bin/musl-gcc rootfs/usr/lib/musl-gcc.specs || true
+              run: cp -r /musl/. rootfs/usr
             - name: obtain rust
               run: |
                   cd rust
-                  ./install.sh --destdir="$(realpath ../rootfs)" --without=rust-docs,rust-docs-json-preview,rust-analyzer-preview
+                  ./install.sh --destdir="$(realpath ../rootfs)" --without=rust-docs,rust-docs-json-preview
                   cd ..
                   rm -rf rust
                   # fuck you rust
-            - name: build gcc?
-              run: |
-                  cd gcc/source
-                  CFLAGS="-static --sysroot=/musl -DHAVE_DECL_BASENAME=1"
-                  contrib/download_prerequisites --no-verify
-                  cd ../build
-                  sudo mv /usr/include "$HOME"/glibcWompWomp
-                  sudo cp -r /musl/include /usr/include
-                  CC="musl-gcc $CFLAGS" CXX="musl-g++ $CFLAGS" ../source/configure --host=x86_64-linux-gnu --build=x86_64-linux-musl --disable-multilib
-                  okay="yeah"
-                  CC="$MUSLCC" CXX="$MUSLCC" make -j$(nproc) || okay="nope"
-                  sudo rm -rf /usr/include
-                  sudo mv "$HOME"/glibcWompWomp /usr/include
-                  # glibc needs to get back here, unfortunately
-                  if [ "$okay" = "nope" ]; then
-                      echo "--- well we're fucked ---"
-                      cat libcody/config.log
-                      exit 1
-                      false
-                  fi
-                  make install DESTDIR="$(realpath ../rootfs)"
-                  cd ../..
-                  echo "okay"
-                  exit 1
-                  false
-            # - name: build tcc
-            #   run: |
-            #       cd tcc
-            #       rm lib/bcheck.c
-            #       touch lib/bcheck.c
-            #       CFLAGS="--sysroot=/musl" ./configure --cc="musl-gcc -static" --prefix="/usr" --exec-prefix="/" --libpaths="/lib" --sysincludepaths="/usr/include" --crtprefix="/lib" --enable-static --config-bcheck=no --config-musl --triplet="x86_64-linux-musl"
-            #       sudo mv /usr/include "$HOME"/glibcWompWomp
-            #       sudo cp -r /musl/include /usr/include
-            #       # gaslight tcc into believing musl is here
-            #       make CC="musl-gcc" CFLAGS="-static --sysroot=/musl" LDFLAGS="-static" CONFIG_bcheck=no -j$(nproc)
-            #       sudo rm -rf /usr/include
-            #       sudo mv "$HOME"/glibcWompWomp /usr/include
-            #       # glibc needs to get back here, unfortunately
-            #       chmod +x ./tcc
-            #       mv ./tcc ../rootfs/bin/
-            #       mv ./libtcc1.a ../rootfs/lib/tcc/
-            #       cp -rf include/. ../rootfs/usr/include/
-            #       cd ..
             - name: build busybox
               run: |
                   ./setupBb
@@ -135,14 +89,14 @@ jobs:
             - name: build make ig
               run: |
                   cd make
-                  MUSLCC="musl-gcc -static --sysroot=/musl"
+                  MUSLCC="/musl/gcc -static"
                   CC="$MUSLCC" HOSTCC="$MUSLCC" ./configure --host=x86_64-linux-musl --build=x86_64-linux-musl --disable-dependency-tracking
                   CC="$MUSLCC" make -j$(nproc)
                   make install DESTDIR="$(realpath ../rootfs)"
                   cd ..
             - name: build final image?
               run: |
-                  tree rootfs -I "tmp|usr/local"
+                  tree rootfs -I "tmp"
                   cd rootfs
                   chmod 1777 tmp
                   for a in bin lib; do

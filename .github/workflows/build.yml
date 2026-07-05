@@ -30,7 +30,6 @@ jobs:
                   sudo apt install -y ccache flex bison libncurses-dev libssl-dev libelf-dev
                   # aria2c
                   # sudo apt install -y libxml2-dev autoconf automake autotools-dev autopoint libtool libssl-dev zlib1g-dev libsqlite3-dev libxml2-dev liblzma-dev libssl3
-                  ln -s "$(which g++)" "/usr/bin/musl-g++"
             - name: setup ccache
               uses: actions/cache@v5
               with:
@@ -73,7 +72,7 @@ jobs:
                   ./setupBb
                   cd busybox
                   make oldconfig
-                  MUSLCC="musl-gcc -static --sysroot=/musl"
+                  MUSLCC="/musl/gcc -static --sysroot=/musl"
                   CC="$MUSLCC" HOSTCC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/

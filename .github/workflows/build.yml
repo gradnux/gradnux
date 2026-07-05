@@ -44,8 +44,9 @@ jobs:
                   mkdir -p dev etc lib lib64 proc sbin sys usr tmp bin lib/tcc usr/local
                   cd ..
                   mkdir -p busybox ~/bb make gcc/source gcc/build rust
-                  wget --version || aria2c --version
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
+                  sudo apt install -y --reinstall --fix-broken lbzip2
+                  lbzip2 --version
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   tar -xf make.tar.gz -C make --strip-components=1

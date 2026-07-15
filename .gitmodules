@@ -2,9 +2,6 @@
 	path = kernel
 	url = https://github.com/torvalds/linux.git
 	shallow = true
-[submodule "tcc"]
-	path = tcc
-	url = https://repo.or.cz/tinycc.git
 [submodule "rootfs/tmp/scavenge"]
 	path = rootfs/tmp/scavenge
 	url = https://github.com/gradnux/scavenge.git

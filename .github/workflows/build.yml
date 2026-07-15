@@ -22,8 +22,6 @@ jobs:
         steps:
             - name: check out
               uses: actions/checkout@v5
-              with:
-                  lfs: true
             - name: install prerequisites
               run: |
                   # kernel
@@ -45,7 +43,7 @@ jobs:
                   cd ..
                   mkdir -p busybox ~/bb make gcc/source gcc/build rust
                   aria2c -j 16 -x 16 -s 16 "https://busybox.net/downloads/busybox-1.38.0.tar.bz2" -o bb.tar.bz2
-                  aria2c -j 16 -x 16 -s 16 "https://static.rust-lang.org/dist/rust-1.96.0-x86_64-unknown-linux-musl.tar.gz" -o r.tar.bz2
+                  aria2c -j 16 -x 16 -s 16 "https://static.rust-lang.org/dist/rust-1.96.0-x86_64-unknown-linux-musl.tar.gz" -o rust.tar.bz2
                   tar -xf bb.tar.bz2 -C busybox --strip-components=1
                   tar -xf rust.tar.gz -C rust --strip-components=1
                   tar -xf make.tar.gz -C make --strip-components=1

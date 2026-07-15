@@ -73,8 +73,10 @@ jobs:
                   MUSLCC="/musl/gcc -static --sysroot=/musl"
                   sudo mv /usr/include "$HOME"/glibcWompWomp
                   sudo cp -r /musl/include /usr/include
+                  ls /usr/include/sys/types.h || echo "what"
                   # gaslight busybox into believing musl is here
                   CC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make oldconfig
+                  echo "error is in make -j"
                   CC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/

@@ -71,8 +71,12 @@ jobs:
               run: |
                   ./setupBb
                   cd busybox
-                  make oldconfig
                   MUSLCC="/musl/gcc -static --sysroot=/musl"
+                  #sudo mv /usr/include "$HOME"/glibcWompWomp
+                  #sudo cp -r /musl/include /usr/include
+                  ## gaslight busybox into believing musl is here
+                  # wait what if the sysroot works
+                  CC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make oldconfig
                   CC="$MUSLCC" CFLAGS="-static" LDFLAGS="-static" make -j$(nproc)
                   make CONFIG_PREFIX="$HOME/bb" install
                   mkdir -p ../rootfs/usr/share/man/man1/
